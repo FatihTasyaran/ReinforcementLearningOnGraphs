@@ -3,7 +3,8 @@ import os
 import random
 from graphviz import Digraph
 from graph_tool.all import *
-import matplotlib.pyplot as plt 
+import matplotlib.pyplot as plt
+import math
 
 def node(no_states):
     return random.randint(0, no_states-1)
@@ -21,10 +22,10 @@ def generate_weakly_connected_graph(no_states, no_edges, density, card_alphabet)
         graph[i]['Faulty'] = False
 
 
-        nodes = []
-
-        for i in range(no_states):
-            nodes.append('S'+str(i))
+    nodes = []
+        
+    for i in range(no_states):
+        nodes.append('S'+str(i))
 
     connected = []
     unconnected = []
@@ -35,6 +36,7 @@ def generate_weakly_connected_graph(no_states, no_edges, density, card_alphabet)
     first = random.choice(unconnected)
     connected.append(first)
     unconnected.remove(first)
+
     while(len(unconnected) > 0):
         c = random.choice(connected)
         u = random.choice(unconnected)
@@ -70,13 +72,12 @@ def generate_weakly_connected_graph(no_states, no_edges, density, card_alphabet)
 
         while(repetition):
             for item in current_out:
-                action
                 if (item[0] == in_node):
                     in_node = 'S'+str(node(no_states))
                     current_out = graph[int(out_node[1:])]['Outgoing_edges']
                     #print("Got that, new in:", in_node, 'current_out:', current_out, 'dont want:', in_node)
                     counter = counter + 1
-                    print('counter: ', counter)
+                    #print('counter: ', counter)
 
                     if(counter > (no_states/2)):
                         skipper = 1
@@ -145,12 +146,31 @@ def outer_frequency(graph, max_outer):
 
     plt.hist(y, max_outer, histtype='stepfilled')
     plt.show()
+    
+
+def text_print(graph, no_states, density, card_alphabet):
+    for item in graph:
+        print("###", item['State'], "###")
+        print(item, '\n')
+
+    graph_prop = '# of Nodes: ' + str(no_states) + ' Density: ' + str(density) + ' Alphabet Cardinality: ' + str(card_alphabet)
+    print(graph_prop)
+
+    max_outer = 0
+    loc = 0
+    for i in range(len(graph)):
+        if(len(graph[i]['Outgoing_edges']) > max_outer):
+            #print('Max outer changed to: ', len(graph[i]['Outgoing_edges']), graph[i]['Outgoing_edges'])
+            max_outer = len(graph[i]['Outgoing_edges'])
+            loc = i
+
+    print('Max outer Degree: ', max_outer, ' which is: ', graph[loc])
 
     
 def gt_draw(lib_graph):  
     print("Drawing graph")
     pos = arf_layout(lib_graph, max_iter=0)
-    graph_draw(lib_graph, pos=pos ,output_size=(300,300), output="gt_4.pdf")
+    graph_draw(lib_graph, pos=pos , output="gt_4.pdf")
 
 def weird_draw(bio_graph):
 
@@ -168,8 +188,246 @@ def weird_draw(bio_graph):
     shape.a %= 14
     graph_draw(g, pos=pos, vertex_fill_color=b, vertex_shape=shape, edge_control_points=cts, edge_color=[0, 0, 0, 0.3], vertex_anchor=0, output="netscience_nested_mdl.pdf")
 
-        
+def gv_draw(graph):
+    
+    dot = Digraph(comment='graph_prop', engine='sfdp', node_attr={'width':'.0005', 'fixed_size':'True'})
 
+    for item in graph:
+        if(item['Faulty']):
+            dot.node(item['State'], item['State'], color='red')
+        else:
+            dot.node(item['State'], item['State'])
+
+        for edges in item['Outgoing_edges']:
+            dot.edge(item['State'], edges[0], constraint = 'false', label= str(edges[1]))
+
+    dot.render('test-output/round-table.gv', view=True)
+
+
+def generate_strongly_connected_graph(no_states, no_edges, density, card_alphabet):
+    graph = [{} for i in range(no_states)]
+    remaining_edges = no_edges
+
+    for i in range(len(graph)):
+        graph[i]['State'] = 'S'+str(i)
+        graph[i]['Outgoing_edges'] = []
+        graph[i]['Incoming_edges'] = []
+        graph[i]['Faulty'] = False
+
+    threshold = 2000
+    no_clusters = 0
+
+    if(no_states < threshold):
+        no_clusters = math.log2(no_states)
+    else:
+        no_clusters = int(no_states/150)
+
+    no_clusters = int(no_clusters)
+    cluster_size = int(no_states/no_clusters)
+
+    print('No clusters: ', no_clusters)
+    print('Cluster Size: ', cluster_size)
+
+    nodes = []
+    nodes_remainings= []
+
+    for i in range(0, no_states):
+        nodes.append(i)
+        nodes_remainings.append(i)
+
+
+    clusters = [[] for i in range(no_clusters)]
+    masters = []
+    for c in range(0, no_clusters):
+
+        for n in range(cluster_size):
+            chosen = random.choice(nodes)
+            clusters[c].append(chosen)
+            nodes.remove(chosen)
+
+    remaining = no_states-(cluster_size*no_clusters)
+    if(remaining):
+        for item in nodes:
+            clusters[len(clusters)-1].append(item)
+
+    for i in range(len(clusters)):
+        print('###CLUSTER ', i , '###')
+        print(clusters[i])
+
+    if(no_edges < (2*no_states)):
+        
+        for cluster in clusters:
+
+            for i in range(len(cluster)-1):
+                out_node = cluster[i]
+                in_node = cluster[i+1]
+
+                out_state = 'S' + str(out_node)
+                in_state = 'S' + str(in_node)
+
+                act = action(card_alphabet)
+
+                graph[out_node]['Outgoing_edges'].append((in_state, act))
+                graph[in_node]['Incoming_edges'].append((out_state, act))
+                remaining_edges = remaining_edges - 1
+
+            out_node = cluster[len(cluster)-1]
+            in_node = cluster[0]
+
+            out_state = 'S' + str(out_node)
+            in_state = 'S' + str(in_node)
+
+            graph[out_node]['Outgoing_edges'].append((in_state, act))
+            graph[in_node]['Incoming_edges'].append((out_state, act))
+            remaining_edges = remaining_edges - 1
+
+        first_master = 0
+        for i in range(len(clusters)-1):
+            
+            out_node = random.choice(clusters[i])
+            in_node = random.choice(clusters[i+1])
+            if(i == 0):
+                first_master = out_node
+
+            out_state = 'S' + str(out_node)
+            in_state = 'S' + str(in_node)
+
+            graph[out_node]['Outgoing_edges'].append((in_state, act))
+            graph[in_node]['Incoming_edges'].append((out_state, act))
+            remaining_edges = remaining_edges - 1
+
+        out_node = random.choice(clusters[len(clusters)-1])
+        in_node = first_master
+
+        out_state = 'S' + str(out_node)
+        in_state = 'S' + str(in_node)
+
+        graph[out_node]['Outgoing_edges'].append((in_state, act))
+        graph[in_node]['Incoming_edges'].append((out_state, act))
+        remaining_edges = remaining_edges - 1
+
+        for i in range(remaining_edges):
+            out_node = node(no_states)
+            in_node = node(no_states)
+
+            out_state = 'S' + str(out_node)
+            in_state = 'S' + str(in_node)
+
+            act = action(card_alphabet)
+            graph[out_node]['Outgoing_edges'].append((in_state, act))
+            graph[in_node]['Incoming_edges'].append((out_state, act))
+
+    else:
+
+        for cluster in clusters:
+            master = random.choice(cluster)
+            masters.append(master)
+
+            for e in range(2 * len(cluster)):
+                out_node = random.choice(cluster)
+                in_node = random.choice(cluster)
+                
+                out_state = 'S' + str(out_node)
+                in_state = 'S' + str(in_node)
+                
+                act = action(card_alphabet)
+                
+                graph[out_node]['Outgoing_edges'].append((in_state, act))
+                graph[in_node]['Incoming_edges'].append((out_state, act))
+
+                remaining_edges = remaining_edges - 1
+
+            for item in cluster:
+                if(len(graph[item]['Outgoing_edges']) == 0 and len(graph[item]['Incoming_edges']) == 0):
+                    out_node = random.choice(cluster)
+
+                    while(len(graph[out_node]['Incoming_edges']) == 0):
+                        out_node = random.choice(cluster)
+
+                    in_node = item
+
+                    out_state = 'S' + str(out_node)
+                    in_state = 'S' + str(in_node)
+                
+                    act = action(card_alphabet)
+                
+                    graph[out_node]['Outgoing_edges'].append((in_state, act))
+                    graph[in_node]['Incoming_edges'].append((out_state, act))
+                    
+                    remaining_edges = remaining_edges - 1
+
+            for item in cluster:
+                if(len(graph[item]['Outgoing_edges']) == 0):
+                    out_node = item
+                    in_node = master
+
+                    out_state = 'S' + str(out_node)
+                    in_state = 'S' + str(in_node)
+
+                    act = action(card_alphabet)
+
+                    graph[out_node]['Outgoing_edges'].append((in_state, act))
+                    graph[in_node]['Incoming_edges'].append((out_state, act))
+                    
+                    remaining_edges = remaining_edges - 1
+
+                if(len(graph[item]['Incoming_edges']) == 0):
+                    out_node = master
+                    in_node = item
+
+                    out_state = 'S' + str(out_node)
+                    in_state = 'S' + str(in_node)
+
+                    act = action(card_alphabet)
+                    
+                    graph[out_node]['Outgoing_edges'].append((in_state, act))
+                    graph[in_node]['Incoming_edges'].append((out_state, act))
+                    
+                    remaining_edges = remaining_edges - 1
+
+            for i in range(len(masters)-1):
+                out_node = masters[i]
+                in_node = masters[i+1]
+
+                out_state = 'S' + str(out_node)
+                in_state = 'S' + str(in_node)
+
+                act = action(card_alphabet)
+                
+                graph[out_node]['Outgoing_edges'].append((in_state, act))
+                graph[in_node]['Incoming_edges'].append((out_state, act))
+                    
+                remaining_edges = remaining_edges - 1
+
+            out_node = masters[len(masters)-1]
+            in_node = masters[0]
+
+            out_state = 'S' + str(out_node)
+            in_state = 'S' + str(in_node)
+            
+            act = action(card_alphabet)
+
+            graph[out_node]['Outgoing_edges'].append((in_state, act))
+            graph[in_node]['Incoming_edges'].append((out_state, act))
+                
+            remaining_edges = remaining_edges - 1
+
+            
+        for i in range(remaining_edges):
+            out_node = random.choice(nodes_remainings)
+            in_node = random.choice(nodes_remainings)
+            
+            out_state = 'S' + str(out_node)
+            in_state = 'S' + str(in_node)
+                
+            act = action(card_alphabet)
+
+            graph[out_node]['Outgoing_edges'].append((in_state, act))
+            graph[in_node]['Incoming_edges'].append((out_state, act))
+            
+        print('remaining_edges:', remaining_edges)
+    return graph
+    
 
 def main():
     random.seed(os.urandom(100000))
@@ -182,31 +440,36 @@ def main():
     no_edges = int(density*no_max_edges)
     print("No edges: ", no_edges)
     print("No max edges: ", no_states*(card_alphabet))
-    
-    graph, lib_graph, max_outer = generate_weakly_connected_graph(no_states, no_edges, density, card_alphabet)
+
+    if((card_alphabet* no_states * density) < no_states):
+        print('Not possible to generate Strongly Connecting DFA')
+        print('Exiting...')
+        exit()
+
+    strong_graph = generate_strongly_connected_graph(no_states, no_edges, density, card_alphabet)
+    gv_draw(strong_graph)
+    text_print(strong_graph, no_states, density, card_alphabet)
+    outer_frequency(strong_graph, 100)
+
+
+    ####GENERATE WEAKLY CONNECTED GRAPH####
+    #graph, lib_graph, max_outer = generate_weakly_connected_graph(no_states, no_edges, density, card_alphabet)
     #generate_strongly_connected_graph()
-    outer_frequency(graph, max_outer)
-    gt_draw(lib_graph)
-    #gv_draw()
+    #outer_frequency(graph, max_outer)
+    #gt_draw(lib_graph)
+    #gv_draw(graph)
+
+    #prop_map, array = graph_tool.topology.label_components(lib_graph)
+    #print(prop_map)
+    #print(array)
+    ####GENERATE WEAKLY CONNECTED GRAPH####
+    
     
 
 if __name__ == '__main__':
     main()
     
-'''
-dot = Digraph(comment=graph_prop, engine='sfdp', node_attr={'width':'.0005', 'fixed_size':'True'})
 
-for item in graph:
-    if(item['Faulty']):
-        dot.node(item['State'], item['State'], color='red')
-    else:
-        dot.node(item['State'], item['State'])
-
-    for edges in item['Outgoing_edges']:
-        dot.edge(item['State'], edges[0], constraint = 'false', label= str(edges[1]))
-
-dot.render('test-output/round-table.gv', view=True)
-'''
     
 
 
