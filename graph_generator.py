@@ -132,11 +132,10 @@ def generate_weakly_connected_graph(no_states, no_edges, density, card_alphabet)
             int_node = int(edge[0][1:])
             lib_graph.add_edge(item['lib_node'], graph[int_node]['lib_node'])
 
-    #print("Calculate positioning")
-    #pos = arf_layout(lib_graph)
+    return graph, lib_graph, max_outer
 
 
-    ###DRAWING OUTER EDGE FREQUENCY###
+def outer_frequency(graph, max_outer):
     x = []
     y = []
 
@@ -144,19 +143,32 @@ def generate_weakly_connected_graph(no_states, no_edges, density, card_alphabet)
         x.append(i)
         y.append(len(graph[i]['Outgoing_edges']))
 
-    #y.sort(reverse=True)
-    #plt.plot(x, y, linewidth=.2)
     plt.hist(y, max_outer, histtype='stepfilled')
     plt.show()
 
-    ###DRAWING OUTER EDGE FREQUENCY###
+    
+def gt_draw(lib_graph):  
+    print("Drawing graph")
+    pos = arf_layout(lib_graph, max_iter=0)
+    graph_draw(lib_graph, pos=pos ,output_size=(300,300), output="gt_4.pdf")
 
+def weird_draw(bio_graph):
 
-    print_graph = 1
-    if(print_graph):
-        print("Drawing graph")
-        graph_draw(lib_graph, output_size=(300,300), output="gt_4.pdf")
+    print("Drawing bio graph")
+    g = lib_graph
+    g = GraphView(g, vfilt=label_largest_component(g))
+    g.purge_vertices()
+    state = minimize_nested_blockmodel_dl(g, deg_corr=True)
+    t = get_hierarchy_tree(state)[0]
+    tpos = pos = radial_tree_layout(t, t.vertex(t.num_vertices() - 1), weighted=True)
+    cts = get_hierarchy_control_points(g, t, tpos)
+    pos = g.own_property(tpos)
+    b = state.levels[0].b
+    shape = b.copy()
+    shape.a %= 14
+    graph_draw(g, pos=pos, vertex_fill_color=b, vertex_shape=shape, edge_control_points=cts, edge_color=[0, 0, 0, 0.3], vertex_anchor=0, output="netscience_nested_mdl.pdf")
 
+        
 
 
 def main():
@@ -171,11 +183,12 @@ def main():
     print("No edges: ", no_edges)
     print("No max edges: ", no_states*(card_alphabet))
     
-    generate_weakly_connected_graph(no_states, no_edges, density ,card_alphabet)
+    graph, lib_graph, max_outer = generate_weakly_connected_graph(no_states, no_edges, density, card_alphabet)
     #generate_strongly_connected_graph()
-    #gt_draw()
+    outer_frequency(graph, max_outer)
+    gt_draw(lib_graph)
     #gv_draw()
-    #draw_outer_degrees()
+    
 
 if __name__ == '__main__':
     main()
