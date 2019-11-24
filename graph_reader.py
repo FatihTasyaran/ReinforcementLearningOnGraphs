@@ -30,8 +30,9 @@ def read_from_file(filename):
         for i in range(out_edges_finish+1, len(info)-2, 2):
             graph[l]['Incoming_edges'].append((info[i],info[i+1]))
 
-        if(info[len(info)-1] == 'True'):
+        if(info[len(info)-1] == 'True\n'):
             graph[l]['Faulty'] = True
+        
 
         
         
