@@ -213,12 +213,18 @@ def add_to_graph(graph, out_node, in_node, card_alphabet):
 
     for i in range(len(graph[out_node]['Outgoing_edges'])):
         actions.remove(graph[out_node]['Outgoing_edges'][i][1])
+
+    print("WILL CHOOSE FROM:" ,len(graph[out_node]['Outgoing_edges']), "WHERE MAX CARDINALITY IS:", card_alphabet)
+    try:
+        act = random.choice(actions)
+        print('I chose:', act)
+        graph[out_node]['Outgoing_edges'].append((in_state, act))
+        graph[in_node]['Incoming_edges'].append((out_state, act))
+    except:
+        print("State:", out_state, "Failed to find Action")
         
-    act = random.choice(actions)
-    print('I chose:', act)
     
-    graph[out_node]['Outgoing_edges'].append((in_state, act))
-    graph[in_node]['Incoming_edges'].append((out_state, act))
+        
 
 
 ##PRECONDITION: ONLY TO BE APPLIED TO RANDOM EDGES WHICH WILL NOT VIOLATE STRONGLY CONNECTED PROPERTY
