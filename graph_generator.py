@@ -215,9 +215,36 @@ def add_to_graph(graph, out_node, in_node, card_alphabet):
         actions.remove(graph[out_node]['Outgoing_edges'][i][1])
         
     act = random.choice(actions)
+    print('I chose:', act)
     
     graph[out_node]['Outgoing_edges'].append((in_state, act))
     graph[in_node]['Incoming_edges'].append((out_state, act))
+
+
+##PRECONDITION: ONLY TO BE APPLIED TO RANDOM EDGES WHICH WILL NOT VIOLATE STRONGLY CONNECTED PROPERTY
+##POSTCONDITION: WILL RETURN A STATE THAT OUT_NODE HAVE NO OUTGOING EDGE
+def multi_transition_check(graph, out_node, in_node, no_states):
+    good_returner = in_node
+
+    outgoing_states = []
+
+    for item in graph[out_node]['Outgoing_edges']:
+        outgoing_states.append(int(item[0][1:]))
+        
+    print("OUTGOING_STATES: ", outgoing_states)
+
+    exist = True
+    while(exist):
+        if good_returner in outgoing_states:
+            good_returner = node(no_states)
+            print("CHANGED: ", in_node, good_returner)
+        else:
+            exist = False
+
+    print("I HAVE BEEN SUMMONED:", out_node, in_node, "RETURNED: ", good_returner)
+
+    return good_returner
+        
     
 
 def generate_strongly_connected_graph(no_states, no_edges, density, card_alphabet):
@@ -271,6 +298,8 @@ def generate_strongly_connected_graph(no_states, no_edges, density, card_alphabe
         print(clusters[i])
 
     if(no_edges < (2*no_states)):
+
+        print("SPARSE ALGORITHM")
         
         for cluster in clusters:
 
@@ -309,9 +338,12 @@ def generate_strongly_connected_graph(no_states, no_edges, density, card_alphabe
             out_node = node(no_states)
             in_node = node(no_states)
 
+            in_node = multi_transition_check(graph, out_node, in_node, no_states)
+
             add_to_graph(graph, out_node, in_node, card_alphabet)
 
     else:
+        print("DENSE ALGORITHM")
 
         for cluster in clusters:
             master = random.choice(cluster)
@@ -370,6 +402,7 @@ def generate_strongly_connected_graph(no_states, no_edges, density, card_alphabe
             in_node = random.choice(nodes_remainings)
             
             add_to_graph(graph, out_node, in_node, card_alphabet)
+            remaining_edges = remaining_edges - 1
             
         print('remaining_edges:', remaining_edges)
     return graph
