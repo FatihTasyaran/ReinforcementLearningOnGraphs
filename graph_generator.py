@@ -462,10 +462,87 @@ def generate_strongly_connected_graph(no_states, no_edges, density, card_alphabe
         print('remaining_edges:', remaining_edges)
         
     return graph
+
+def strongly_connected_alg2(no_states, no_edges, density, card_alphabet):
+    graph = [{} for i in range(no_states)]
+
+    for i in range(len(graph)):
+        graph[i]['State'] = 'S'+str(i)
+        graph[i]['Outgoing_edges'] = []
+        graph[i]['Incoming_edges'] = []
+        graph[i]['Faulty'] = False
+
+    remaining_edges = no_edges
+    
+    nodes = []
+    adding = []
+    added = []
+
+    for i in range(no_states):
+        nodes.append(i)
+        adding.append(i)
+
+    first = random.choice(nodes)
+    adding.remove(first)
+    added.append(first)
+    second = random.choice(nodes)
+    adding.remove(second)
+    added.append(second)
+
+    add_to_graph(graph, first, second, card_alphabet)
+    remaining_edges = remaining_edges -1
+    add_to_graph(graph, second, first, card_alphabet)
+    remaining_edges = remaining_edges -1
+
+    
+    for item in adding:
+        out_node = item
+        in_node = random.choice(added)
+        
+        unsuccess = True
+        while(unsuccess):
+            if(not dense_sanity_check(graph, out_node, in_node)):
+                in_node = random.choice(added)
+            else:
+                unsuccess = False
+
+        add_to_graph(graph, out_node, in_node, card_alphabet)
+        remaining_edges = remaining_edges -1
+
+        out_node = random.choice(added)
+        in_node = item
+
+        unsuccess = True
+        while(unsuccess):
+            if(not dense_sanity_check(graph, out_node, in_node)):
+                out_node = random.choice(added)
+            else:
+                unsuccess = False
+
+        add_to_graph(graph, out_node, in_node, card_alphabet)
+        remaining_edges = remaining_edges -1
+        added.append(item)
+
+    for e in range(remaining_edges):
+        out_node = random.choice(nodes)
+        in_node = random.choice(nodes)
+
+        unsuccess = True
+        while(unsuccess):
+            if(not dense_sanity_check(graph, out_node, in_node)):
+                in_node = random.choice(added)
+            else:
+                unsuccess = False
+
+        add_to_graph(graph, out_node, in_node, card_alphabet)
+        
+    
+
+    return graph
     
 
 def main():
-    random.seed(os.urandom(100000))
+    random.seed(os.urandom(1000))
 
     no_states = int(sys.argv[1])
     density = float(sys.argv[2])
@@ -481,11 +558,20 @@ def main():
         print('Exiting...')
         exit()
 
-    strong_graph = generate_strongly_connected_graph(no_states, no_edges, density, card_alphabet)
-    gv_draw(strong_graph)
-    text_print(strong_graph, no_states, density, card_alphabet)
-    outer_frequency(strong_graph, 100)
+    ####GENERATE STRONGLY CONNECTED GRAPH ALG2####
+    strong_graph_2 = strongly_connected_alg2(no_states, no_edges, density, card_alphabet)
+    gv_draw(strong_graph_2)
+    text_print(strong_graph_2, no_states, density, card_alphabet)
+    outer_frequency(strong_graph_2, 100)
+    ####GENERATE STRONGLY CONNECTED GRAPH ALG2####
 
+    ####GENERATE STRONGLY CONNECTED GRAPH####
+    #strong_graph = generate_strongly_connected_graph(no_states, no_edges, density, card_alphabet)
+    #gv_draw(strong_graph)
+    #text_print(strong_graph, no_states, density, card_alphabet)
+    #outer_frequency(strong_graph, 100)
+    ####GENERATE STRONGLY CONNECTED GRAPH####
+    
 
     ####GENERATE WEAKLY CONNECTED GRAPH####
     #graph, lib_graph, max_outer = generate_weakly_connected_graph(no_states, no_edges, density, card_alphabet)
