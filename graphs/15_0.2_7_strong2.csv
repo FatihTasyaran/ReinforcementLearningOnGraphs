@@ -1,0 +1,15 @@
+S0,Out,S1,4,S2,0,S5,5,In,S3,2,S2,1,S11,6,False
+S1,Out,S3,5,S7,2,In,S3,6,S0,4,S14,0,False
+S2,Out,S0,1,S6,2,In,S0,0,S4,4,S9,0,False
+S3,Out,S1,6,S0,2,S4,1,In,S1,5,S5,6,S6,0,S13,5,False
+S4,Out,S2,4,In,S3,1,False
+S5,Out,S3,6,In,S0,5,S7,6,False
+S6,Out,S3,0,S10,5,S11,1,S12,4,In,S2,2,S8,3,False
+S7,Out,S5,6,S8,4,In,S1,2,False
+S8,Out,S6,3,S9,5,In,S7,4,S10,4,False
+S9,Out,S2,0,In,S8,5,False
+S10,Out,S8,4,S13,2,In,S6,5,False
+S11,Out,S0,6,In,S6,1,S12,0,False
+S12,Out,S11,0,S14,5,In,S6,4,False
+S13,Out,S3,5,In,S10,2,False
+S14,Out,S1,0,In,S12,5,False

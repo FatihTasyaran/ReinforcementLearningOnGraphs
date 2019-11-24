@@ -539,14 +539,46 @@ def strongly_connected_alg2(no_states, no_edges, density, card_alphabet):
     
 
     return graph
+
+def write_to_file(graph, no_states, density, card_alphabet, alg):
+    print('Writing to file')
+    filename = str(no_states) + '_' + str(density) + '_' + str(card_alphabet) + '_' + alg + '.csv'
+    filepath = 'graphs/'
+    wrt = open(filepath+filename, 'w+')
+
+    for state in graph:
+        wrt.write(state['State']) ##Write name of State
+        wrt.write(',')
+
+        wrt.write('Out')
+        wrt.write(',')
+        for item in state['Outgoing_edges']:
+            wrt.write(str(item[0]))
+            wrt.write(',')
+            wrt.write(str(item[1]))
+            wrt.write(',')
+
+        wrt.write('In')
+        wrt.write(',')
+        for item in state['Incoming_edges']:
+            wrt.write(str(item[0]))
+            wrt.write(',')
+            wrt.write(str(item[1]))
+            wrt.write(',')
+
+        wrt.write(str(state['Faulty']))
+        wrt.write('\n')
+    print('wrote ', filename, ' to ', filepath + filename)
+        
     
 
 def main():
-    random.seed(os.urandom(1000))
+    random.seed(os.urandom(10000))
 
     no_states = int(sys.argv[1])
     density = float(sys.argv[2])
     card_alphabet = int(sys.argv[3])
+    alg = sys.argv[4]
 
     no_max_edges = no_states*card_alphabet
     no_edges = int(density*no_max_edges)
@@ -559,31 +591,41 @@ def main():
         exit()
 
     ####GENERATE STRONGLY CONNECTED GRAPH ALG2####
-    strong_graph_2 = strongly_connected_alg2(no_states, no_edges, density, card_alphabet)
-    gv_draw(strong_graph_2)
-    text_print(strong_graph_2, no_states, density, card_alphabet)
-    outer_frequency(strong_graph_2, 100)
+    if(alg == 'strong2'):
+        strong_graph_2 = strongly_connected_alg2(no_states, no_edges, density, card_alphabet)
+        gv_draw(strong_graph_2)
+        text_print(strong_graph_2, no_states, density, card_alphabet)
+        outer_frequency(strong_graph_2, 100)
+        write_to_file(strong_graph_2, no_states, density, card_alphabet, alg)
     ####GENERATE STRONGLY CONNECTED GRAPH ALG2####
 
     ####GENERATE STRONGLY CONNECTED GRAPH####
-    #strong_graph = generate_strongly_connected_graph(no_states, no_edges, density, card_alphabet)
-    #gv_draw(strong_graph)
-    #text_print(strong_graph, no_states, density, card_alphabet)
-    #outer_frequency(strong_graph, 100)
+    elif(alg == 'strong'):
+        strong_graph = generate_strongly_connected_graph(no_states, no_edges, density, card_alphabet)
+        gv_draw(strong_graph)
+        text_print(strong_graph, no_states, density, card_alphabet)
+        outer_frequency(strong_graph, 100)
+        write_to_file(strong_graph, no_states, density, card_alphabet, alg)
     ####GENERATE STRONGLY CONNECTED GRAPH####
     
 
     ####GENERATE WEAKLY CONNECTED GRAPH####
-    #graph, lib_graph, max_outer = generate_weakly_connected_graph(no_states, no_edges, density, card_alphabet)
-    #generate_strongly_connected_graph()
-    #outer_frequency(graph, max_outer)
+    elif(alg == 'weak'):
+        graph, lib_graph, max_outer = generate_weakly_connected_graph(no_states, no_edges, density, card_alphabet)
+        outer_frequency(graph, max_outer)
+        gv_draw(graph)
+        write_to_file(graph, no_states, density, card_alphabet, alg)
+        
     #gt_draw(lib_graph)
-    #gv_draw(graph)
-
     #prop_map, array = graph_tool.topology.label_components(lib_graph)
     #print(prop_map)
     #print(array)
     ####GENERATE WEAKLY CONNECTED GRAPH####
+
+    else:
+        print("Wrong alg argument given, usage is: ")
+        print("python3 graph_generator.py no_states density alphabet_cardinality algorithm")
+        print("algorithm: weak -> weakly connected DFA // strong -> strongly connected DFA // strong2 -> strongly connected DFA with better random topology")
     
     
 
