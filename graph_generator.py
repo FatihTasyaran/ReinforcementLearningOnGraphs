@@ -203,6 +203,22 @@ def gv_draw(graph):
 
     dot.render('test-output/round-table.gv', view=True)
 
+def add_to_graph(graph, out_node, in_node, card_alphabet):
+    out_state = 'S' + str(out_node)
+    in_state = 'S' + str(in_node)
+
+    actions = []
+    for i in range(card_alphabet):
+        actions.append(i)
+
+    for i in range(len(graph[out_node]['Outgoing_edges'])):
+        actions.remove(graph[out_node]['Outgoing_edges'][i][1])
+        
+    act = random.choice(actions)
+    
+    graph[out_node]['Outgoing_edges'].append((in_state, act))
+    graph[in_node]['Incoming_edges'].append((out_state, act))
+    
 
 def generate_strongly_connected_graph(no_states, no_edges, density, card_alphabet):
     graph = [{} for i in range(no_states)]
@@ -261,24 +277,14 @@ def generate_strongly_connected_graph(no_states, no_edges, density, card_alphabe
             for i in range(len(cluster)-1):
                 out_node = cluster[i]
                 in_node = cluster[i+1]
-
-                out_state = 'S' + str(out_node)
-                in_state = 'S' + str(in_node)
-
-                act = action(card_alphabet)
-
-                graph[out_node]['Outgoing_edges'].append((in_state, act))
-                graph[in_node]['Incoming_edges'].append((out_state, act))
+                
+                add_to_graph(graph, out_node, in_node, card_alphabet)
                 remaining_edges = remaining_edges - 1
 
             out_node = cluster[len(cluster)-1]
             in_node = cluster[0]
 
-            out_state = 'S' + str(out_node)
-            in_state = 'S' + str(in_node)
-
-            graph[out_node]['Outgoing_edges'].append((in_state, act))
-            graph[in_node]['Incoming_edges'].append((out_state, act))
+            add_to_graph(graph, out_node, in_node, card_alphabet)
             remaining_edges = remaining_edges - 1
 
         first_master = 0
@@ -289,33 +295,21 @@ def generate_strongly_connected_graph(no_states, no_edges, density, card_alphabe
             if(i == 0):
                 first_master = out_node
 
-            out_state = 'S' + str(out_node)
-            in_state = 'S' + str(in_node)
-
-            graph[out_node]['Outgoing_edges'].append((in_state, act))
-            graph[in_node]['Incoming_edges'].append((out_state, act))
+            add_to_graph(graph, out_node, in_node, card_alphabet)
             remaining_edges = remaining_edges - 1
 
         out_node = random.choice(clusters[len(clusters)-1])
         in_node = first_master
 
-        out_state = 'S' + str(out_node)
-        in_state = 'S' + str(in_node)
-
-        graph[out_node]['Outgoing_edges'].append((in_state, act))
-        graph[in_node]['Incoming_edges'].append((out_state, act))
+        add_to_graph(graph, out_node, in_node, card_alphabet)
         remaining_edges = remaining_edges - 1
 
+        
         for i in range(remaining_edges):
             out_node = node(no_states)
             in_node = node(no_states)
 
-            out_state = 'S' + str(out_node)
-            in_state = 'S' + str(in_node)
-
-            act = action(card_alphabet)
-            graph[out_node]['Outgoing_edges'].append((in_state, act))
-            graph[in_node]['Incoming_edges'].append((out_state, act))
+            add_to_graph(graph, out_node, in_node, card_alphabet)
 
     else:
 
@@ -327,14 +321,7 @@ def generate_strongly_connected_graph(no_states, no_edges, density, card_alphabe
                 out_node = random.choice(cluster)
                 in_node = random.choice(cluster)
                 
-                out_state = 'S' + str(out_node)
-                in_state = 'S' + str(in_node)
-                
-                act = action(card_alphabet)
-                
-                graph[out_node]['Outgoing_edges'].append((in_state, act))
-                graph[in_node]['Incoming_edges'].append((out_state, act))
-
+                add_to_graph(graph, out_node, in_node, card_alphabet)
                 remaining_edges = remaining_edges - 1
 
             for item in cluster:
@@ -346,14 +333,7 @@ def generate_strongly_connected_graph(no_states, no_edges, density, card_alphabe
 
                     in_node = item
 
-                    out_state = 'S' + str(out_node)
-                    in_state = 'S' + str(in_node)
-                
-                    act = action(card_alphabet)
-                
-                    graph[out_node]['Outgoing_edges'].append((in_state, act))
-                    graph[in_node]['Incoming_edges'].append((out_state, act))
-                    
+                    add_to_graph(graph, out_node, in_node, card_alphabet)
                     remaining_edges = remaining_edges - 1
 
             for item in cluster:
@@ -361,55 +341,27 @@ def generate_strongly_connected_graph(no_states, no_edges, density, card_alphabe
                     out_node = item
                     in_node = master
 
-                    out_state = 'S' + str(out_node)
-                    in_state = 'S' + str(in_node)
-
-                    act = action(card_alphabet)
-
-                    graph[out_node]['Outgoing_edges'].append((in_state, act))
-                    graph[in_node]['Incoming_edges'].append((out_state, act))
-                    
+                    add_to_graph(graph, out_node, in_node, card_alphabet)                    
                     remaining_edges = remaining_edges - 1
 
-                if(len(graph[item]['Incoming_edges']) == 0):
+                elif(len(graph[item]['Incoming_edges']) == 0):
                     out_node = master
                     in_node = item
 
-                    out_state = 'S' + str(out_node)
-                    in_state = 'S' + str(in_node)
-
-                    act = action(card_alphabet)
-                    
-                    graph[out_node]['Outgoing_edges'].append((in_state, act))
-                    graph[in_node]['Incoming_edges'].append((out_state, act))
-                    
+                    add_to_graph(graph, out_node, in_node, card_alphabet)
                     remaining_edges = remaining_edges - 1
 
             for i in range(len(masters)-1):
                 out_node = masters[i]
                 in_node = masters[i+1]
 
-                out_state = 'S' + str(out_node)
-                in_state = 'S' + str(in_node)
-
-                act = action(card_alphabet)
-                
-                graph[out_node]['Outgoing_edges'].append((in_state, act))
-                graph[in_node]['Incoming_edges'].append((out_state, act))
-                    
+                add_to_graph(graph, out_node, in_node, card_alphabet)                    
                 remaining_edges = remaining_edges - 1
 
             out_node = masters[len(masters)-1]
             in_node = masters[0]
 
-            out_state = 'S' + str(out_node)
-            in_state = 'S' + str(in_node)
-            
-            act = action(card_alphabet)
-
-            graph[out_node]['Outgoing_edges'].append((in_state, act))
-            graph[in_node]['Incoming_edges'].append((out_state, act))
-                
+            add_to_graph(graph, out_node, in_node, card_alphabet)                
             remaining_edges = remaining_edges - 1
 
             
@@ -417,13 +369,7 @@ def generate_strongly_connected_graph(no_states, no_edges, density, card_alphabe
             out_node = random.choice(nodes_remainings)
             in_node = random.choice(nodes_remainings)
             
-            out_state = 'S' + str(out_node)
-            in_state = 'S' + str(in_node)
-                
-            act = action(card_alphabet)
-
-            graph[out_node]['Outgoing_edges'].append((in_state, act))
-            graph[in_node]['Incoming_edges'].append((out_state, act))
+            add_to_graph(graph, out_node, in_node, card_alphabet)
             
         print('remaining_edges:', remaining_edges)
     return graph
@@ -441,7 +387,7 @@ def main():
     print("No edges: ", no_edges)
     print("No max edges: ", no_states*(card_alphabet))
 
-    if((card_alphabet* no_states * density) < no_states):
+    if((card_alphabet* no_states * density) <= no_states):
         print('Not possible to generate Strongly Connecting DFA')
         print('Exiting...')
         exit()
