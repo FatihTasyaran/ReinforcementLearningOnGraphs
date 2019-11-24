@@ -19,6 +19,7 @@ def generate_weakly_connected_graph(no_states, no_edges, density, card_alphabet)
     for i in range(len(graph)):
         graph[i]['State'] = 'S'+str(i)
         graph[i]['Outgoing_edges'] = []
+        graph[i]['Incoming_edges'] = []
         graph[i]['Faulty'] = False
 
 
@@ -41,6 +42,7 @@ def generate_weakly_connected_graph(no_states, no_edges, density, card_alphabet)
         c = random.choice(connected)
         u = random.choice(unconnected)
         graph[int(c[1:])]['Outgoing_edges'].append((u,action(card_alphabet)))
+        graph[int(u[1:])]['Incoming_edges'].append((c,action(card_alphabet)))
         connected.append(u)
         unconnected.remove(u)
 
@@ -91,6 +93,7 @@ def generate_weakly_connected_graph(no_states, no_edges, density, card_alphabet)
     
         try:
             graph[int(out_node[1:])]['Outgoing_edges'].append((in_node,action(card_alphabet)))
+            graph[int(in_node[1:])]['Incoming_edges'].append((out_node,action(card_alphabet)))
         except:
             print("ERROR:", out_node)
 
