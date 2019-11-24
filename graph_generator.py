@@ -220,8 +220,12 @@ def add_to_graph(graph, out_node, in_node, card_alphabet):
         print('I chose:', act)
         graph[out_node]['Outgoing_edges'].append((in_state, act))
         graph[in_node]['Incoming_edges'].append((out_state, act))
+        return 1
     except:
         print("State:", out_state, "Failed to find Action")
+        return 0
+
+        
         
     
         
@@ -250,6 +254,17 @@ def multi_transition_check(graph, out_node, in_node, no_states):
     print("I HAVE BEEN SUMMONED:", out_node, in_node, "RETURNED: ", good_returner)
 
     return good_returner
+
+def dense_sanity_check(graph, out_node, in_node):
+    outgoing_states = []
+
+    for item in graph[out_node]['Outgoing_edges']:
+        outgoing_states.append(int(item[0][1:]))
+
+    if in_node in outgoing_states:
+        return False
+    else:
+        return True
         
     
 
@@ -355,13 +370,27 @@ def generate_strongly_connected_graph(no_states, no_edges, density, card_alphabe
             master = random.choice(cluster)
             masters.append(master)
 
+            
+            ##ADDING RANDOM EDGES##
             for e in range(2 * len(cluster)):
                 out_node = random.choice(cluster)
                 in_node = random.choice(cluster)
+
+                unsuccess = True
+
+                while(unsuccess):
+                    if(not dense_sanity_check(graph, out_node, in_node)):
+                        in_node = random.choice(cluster)
+                    else:
+                        unsuccess = False
+                    
                 
                 add_to_graph(graph, out_node, in_node, card_alphabet)
                 remaining_edges = remaining_edges - 1
+            ##ADDING RANDOM EDGES##
 
+            
+            ##MAKES SURE THESE MAKES A CLUSTER##
             for item in cluster:
                 if(len(graph[item]['Outgoing_edges']) == 0 and len(graph[item]['Incoming_edges']) == 0):
                     out_node = random.choice(cluster)
@@ -373,7 +402,10 @@ def generate_strongly_connected_graph(no_states, no_edges, density, card_alphabe
 
                     add_to_graph(graph, out_node, in_node, card_alphabet)
                     remaining_edges = remaining_edges - 1
+            ##MAKES SURE THESE MAKES A CLUSTER##
+            
 
+            ##CONNECTING MASTER TO ROOTS##
             for item in cluster:
                 if(len(graph[item]['Outgoing_edges']) == 0):
                     out_node = item
@@ -382,35 +414,53 @@ def generate_strongly_connected_graph(no_states, no_edges, density, card_alphabe
                     add_to_graph(graph, out_node, in_node, card_alphabet)                    
                     remaining_edges = remaining_edges - 1
 
+            ##CONNECTING MASTER TO ROOTS##
+
+            ##CONNECTING LEAF TO MASTER##
                 elif(len(graph[item]['Incoming_edges']) == 0):
                     out_node = master
                     in_node = item
 
                     add_to_graph(graph, out_node, in_node, card_alphabet)
                     remaining_edges = remaining_edges - 1
+            ##CONNECTING LEAF TO MASTER##
+            
 
-            for i in range(len(masters)-1):
-                out_node = masters[i]
-                in_node = masters[i+1]
+        ##CONNECT MASTERS TO FORM A LOOP##
+        for i in range(len(masters)-1):
+            out_node = masters[i]
+            in_node = masters[i+1]
 
-                add_to_graph(graph, out_node, in_node, card_alphabet)                    
-                remaining_edges = remaining_edges - 1
-
-            out_node = masters[len(masters)-1]
-            in_node = masters[0]
-
-            add_to_graph(graph, out_node, in_node, card_alphabet)                
+            add_to_graph(graph, out_node, in_node, card_alphabet)                    
             remaining_edges = remaining_edges - 1
 
+        out_node = masters[len(masters)-1]
+        in_node = masters[0]
+
+        add_to_graph(graph, out_node, in_node, card_alphabet)                
+        remaining_edges = remaining_edges - 1
+        ##CONNECT MASTERS TO FORM A LOOP##
+
             
+        ##ADD REMAINING EDGES##    
         for i in range(remaining_edges):
             out_node = random.choice(nodes_remainings)
             in_node = random.choice(nodes_remainings)
+
+            unsuccess = True
+
+            while(unsuccess):
+                if(not dense_sanity_check(graph, out_node, in_node)):
+                    in_node = random.choice(cluster)
+                else:
+                    unsuccess = False
             
             add_to_graph(graph, out_node, in_node, card_alphabet)
             remaining_edges = remaining_edges - 1
-            
+        ##ADD REMAINING EDGES##
+        
         print('remaining_edges:', remaining_edges)
+        
     return graph
     
 
