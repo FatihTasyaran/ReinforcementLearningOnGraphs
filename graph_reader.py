@@ -1,4 +1,8 @@
 import sys
+from graphviz import Digraph
+from graph_tool.all import *
+import matplotlib.pyplot as plt
+import math
 
 def read_from_file(filename):
     rdr = open(filename, 'r')
@@ -38,14 +42,40 @@ def read_from_file(filename):
         
     return graph
 
+def convert_to_graphtools(graph):
+    gt_graph = Graph() ##A directed graph
 
+    for item in graph:
+        item['lib_node'] = gt_graph.add_vertex()
+
+    for item in graph:
+        item['lib_edge'] = []
+
+        for edge in item['Outgoing_edges']:
+            int_node = int(edge[0][1:])
+            gt_graph.add_edge(item['lib_node'], graph[int_node]['lib_node'])
+
+    return gt_graph
+    
+    
+#def convert_to_networkX():
+def gt_draw(gt_graph):
+    print("Drawing with graphtools")
+    pos = arf_layout(gt_graph, max_iter=0)
+    graph_draw(gt_graph, pos=pos, output="tryer.pdf")
+    
+#def dot_draw():
+#def outer_degree_hist()
+#def terminal_print():
+#def validate():
 
 def main():
     filename = sys.argv[1]
     graph = read_from_file(filename)
-    print(graph)
-
-
+    gt_graph = convert_to_graphtools(graph)
+    #gt_draw(gt_graph)
+    checked = extract_largest_component(gt_graph, directed=True, prune=True)
+    gt_draw(checked)
 
 if __name__ == '__main__':
     main()
