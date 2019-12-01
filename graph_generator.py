@@ -35,6 +35,30 @@ def add_to_graph(graph, out_node, in_node, card_alphabet):
         return 0
 
 
+##PRECONDITION: ONLY TO BE APPLIED TO RANDOM EDGES WHICH WILL NOT VIOLATE STRONGLY CONNECTED PROPERTY
+##POSTCONDITION: WILL RETURN A STATE THAT OUT_NODE HAVE NO OUTGOING EDGE
+def multi_transition_check(graph, out_node, in_node, no_states):
+    good_returner = in_node
+
+    outgoing_states = []
+
+    for item in graph[out_node]['Outgoing_edges']:
+        outgoing_states.append(int(item[0][1:]))
+        
+    print("OUTGOING_STATES: ", outgoing_states)
+
+    exist = True
+    while(exist):
+        if good_returner in outgoing_states:
+            good_returner = node(no_states)
+            print("CHANGED: ", in_node, good_returner)
+        else:
+            exist = False
+
+    print("I HAVE BEEN SUMMONED:", out_node, in_node, "RETURNED: ", good_returner)
+
+    return good_returner
+    
 
 def generate_weakly_connected_graph(no_states, no_edges, density, card_alphabet):
 
@@ -119,7 +143,8 @@ def generate_weakly_connected_graph(no_states, no_edges, density, card_alphabet)
         try:
             #graph[int(out_node[1:])]['Outgoing_edges'].append((in_node,action(card_alphabet)))
             #graph[int(in_node[1:])]['Incoming_edges'].append((out_node,action(card_alphabet)))
-            add_to_graph(graph, int(out_node[1:]), int(in_node[1:]), card_alphabet)
+            in_node = multi_transition_check(graph, int(out_node[1:]), int(in_node[1:]), no_states)
+            add_to_graph(graph, int(out_node[1:]), in_node, card_alphabet)
         except:
             print("ERROR:", out_node)
 
@@ -232,30 +257,6 @@ def gv_draw(graph):
 
     dot.render('test-output/round-table.gv', view=True)
 
-    
-##PRECONDITION: ONLY TO BE APPLIED TO RANDOM EDGES WHICH WILL NOT VIOLATE STRONGLY CONNECTED PROPERTY
-##POSTCONDITION: WILL RETURN A STATE THAT OUT_NODE HAVE NO OUTGOING EDGE
-def multi_transition_check(graph, out_node, in_node, no_states):
-    good_returner = in_node
-
-    outgoing_states = []
-
-    for item in graph[out_node]['Outgoing_edges']:
-        outgoing_states.append(int(item[0][1:]))
-        
-    print("OUTGOING_STATES: ", outgoing_states)
-
-    exist = True
-    while(exist):
-        if good_returner in outgoing_states:
-            good_returner = node(no_states)
-            print("CHANGED: ", in_node, good_returner)
-        else:
-            exist = False
-
-    print("I HAVE BEEN SUMMONED:", out_node, in_node, "RETURNED: ", good_returner)
-
-    return good_returner
 
 def dense_sanity_check(graph, out_node, in_node):
     outgoing_states = []
@@ -575,12 +576,6 @@ def write_to_file(graph, no_states, density, card_alphabet, alg):
     
 
 def main():
-    random.seed(os.urandom(10000))
-
-    no_states = int(sys.argv[1])
-    density = float(sys.argv[2])
-    card_alphabet = int(sys.argv[3])
-    alg = sys.argv[4]
 
     no_max_edges = no_states*card_alphabet
     no_edges = int(density*no_max_edges)
@@ -632,6 +627,13 @@ def main():
     
 
 if __name__ == '__main__':
+    random.seed(os.urandom(10000))
+
+    no_states = int(sys.argv[1])
+    density = float(sys.argv[2])
+    card_alphabet = int(sys.argv[3])
+    alg = sys.argv[4]
+    
     main()
     
 
