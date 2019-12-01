@@ -596,7 +596,7 @@ def main():
     ####GENERATE STRONGLY CONNECTED GRAPH ALG2####
     if(alg == 'strong2'):
         strong_graph_2 = strongly_connected_alg2(no_states, no_edges, density, card_alphabet)
-        gv_draw(strong_graph_2)
+        #gv_draw(strong_graph_2)
         text_print(strong_graph_2, no_states, density, card_alphabet)
         outer_frequency(strong_graph_2, 100)
         write_to_file(strong_graph_2, no_states, density, card_alphabet, alg)
@@ -605,7 +605,7 @@ def main():
     ####GENERATE STRONGLY CONNECTED GRAPH####
     elif(alg == 'strong'):
         strong_graph = generate_strongly_connected_graph(no_states, no_edges, density, card_alphabet)
-        gv_draw(strong_graph)
+        #gv_draw(strong_graph)
         text_print(strong_graph, no_states, density, card_alphabet)
         outer_frequency(strong_graph, 100)
         write_to_file(strong_graph, no_states, density, card_alphabet, alg)
@@ -616,7 +616,7 @@ def main():
     elif(alg == 'weak'):
         graph, lib_graph, max_outer = generate_weakly_connected_graph(no_states, no_edges, density, card_alphabet)
         outer_frequency(graph, max_outer)
-        gv_draw(graph)
+        #gv_draw(graph)
         write_to_file(graph, no_states, density, card_alphabet, alg)
         
     #gt_draw(lib_graph)

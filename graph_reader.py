@@ -85,6 +85,43 @@ def gt_draw(gt_graph):
 #def terminal_print():
 #def validate():
 
+def assure_DFA(graph):
+    ##PROPERTIES OF SCC DFA
+    ##1 -> IN_DEGREE > 0 & OUT_DEGREE > 0
+    ##2 -> NO SAME ACTION FOR DIFFERENT TRANSACTIONS
+    ##3 -> NO SAME OUT_NODE FROM A NODE
+
+    DFA = True
+    
+    print(graph)
+
+    for item in graph:
+        directions = []
+        actions = []
+        for e in item['Outgoing_edges']:
+            directions.append(int(e[0][1:]))
+            actions.append(int(e[1]))
+
+        print('###')
+        print("State ", item['State'])
+        print('Outgoing Edges:', directions)
+        print('Actions:', actions)
+
+        for d in directions:
+            if (directions.count(d) > 1):
+                print("Erroneous directions:", directions)
+                DFA = False
+
+        for a in actions:
+            if (actions.count(a) > 1):
+                print("Erroneous actions:", actions)
+                DFA = False
+
+    return DFA
+                
+    
+        
+
 def main():
     filename = sys.argv[1]
     graph = read_from_file(filename)
@@ -95,8 +132,13 @@ def main():
 
     nx_graph = convert_to_networkX(graph)
 
+
+    if assure_DFA(graph):
+        print("GRAPH IS A DFA")
+    else:
+        print("GRAPH IS NOT A DFA")
+        
     print('#Nodes:', len(nx_graph), 'Is strongly connected:', nx.is_strongly_connected(nx_graph))
-    
 
 
 if __name__ == '__main__':
