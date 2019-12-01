@@ -3,6 +3,7 @@ from graphviz import Digraph
 from graph_tool.all import *
 import matplotlib.pyplot as plt
 import math
+import networkx as nx
 
 def read_from_file(filename):
     rdr = open(filename, 'r')
@@ -56,6 +57,21 @@ def convert_to_graphtools(graph):
             gt_graph.add_edge(item['lib_node'], graph[int_node]['lib_node'])
 
     return gt_graph
+
+def convert_to_networkX(graph):
+    nxg = nx.DiGraph()
+
+    for item in graph:
+        nxg.add_node(int(item['State'][1:]))
+
+    for item in graph:
+
+        for edge in item:
+            edges = item['Outgoing_edges']
+            for conn in edges:
+                nxg.add_edge(int(item['State'][1:]),int(conn[0][1:]), action=conn[1])
+
+    return nxg
     
     
 #def convert_to_networkX():
@@ -72,10 +88,16 @@ def gt_draw(gt_graph):
 def main():
     filename = sys.argv[1]
     graph = read_from_file(filename)
-    gt_graph = convert_to_graphtools(graph)
+    #gt_graph = convert_to_graphtools(graph)
     #gt_draw(gt_graph)
-    checked = extract_largest_component(gt_graph, directed=True, prune=True)
-    gt_draw(checked)
+    #checked = extract_largest_component(gt_graph, directed=True, prune=True)
+    #gt_draw(checked)
+
+    nx_graph = convert_to_networkX(graph)
+
+    print('#Nodes:', len(nx_graph), 'Is strongly connected:', nx.is_strongly_connected(nx_graph))
+    
+
 
 if __name__ == '__main__':
     main()
