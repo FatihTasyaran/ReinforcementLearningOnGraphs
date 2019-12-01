@@ -463,6 +463,16 @@ def generate_strongly_connected_graph(no_states, no_edges, density, card_alphabe
         ##ADD REMAINING EDGES##
         
         print('remaining_edges:', remaining_edges)
+
+    
+    no_faulty = no_states*0.05
+    no_faulty = int(no_faulty)
+    if (no_faulty == 0):
+        no_faulty = 1
+
+    for i in range(no_faulty):
+        fault_loc = node(no_states)
+        graph[fault_loc]['Faulty'] = True
         
     return graph
 
@@ -538,14 +548,22 @@ def strongly_connected_alg2(no_states, no_edges, density, card_alphabet):
                 unsuccess = False
 
         add_to_graph(graph, out_node, in_node, card_alphabet)
+
         
-    
+    no_faulty = no_states*0.05
+    no_faulty = int(no_faulty)
+    if (no_faulty == 0):
+        no_faulty = 1
+
+    for i in range(no_faulty):
+        fault_loc = node(no_states)
+        graph[fault_loc]['Faulty'] = True
 
     return graph
 
-def write_to_file(graph, no_states, density, card_alphabet, alg):
+def write_to_file(graph, no_states, density, card_alphabet, alg, no):
     print('Writing to file')
-    filename = str(no_states) + '_' + str(density) + '_' + str(card_alphabet) + '_' + alg + '.csv'
+    filename = str(no_states) + '_' + str(density) + '_' + str(card_alphabet) + '_' + alg + '_' +'#'+ no +'.csv'
     filepath = 'graphs/'
     wrt = open(filepath+filename, 'w+')
 
@@ -575,7 +593,7 @@ def write_to_file(graph, no_states, density, card_alphabet, alg):
         
     
 
-def main():
+def main(no_states, density, card_alphabet, alg, no):
 
     no_max_edges = no_states*card_alphabet
     no_edges = int(density*no_max_edges)
@@ -593,7 +611,7 @@ def main():
         #gv_draw(strong_graph_2)
         text_print(strong_graph_2, no_states, density, card_alphabet)
         outer_frequency(strong_graph_2, 100)
-        write_to_file(strong_graph_2, no_states, density, card_alphabet, alg)
+        write_to_file(strong_graph_2, no_states, density, card_alphabet, alg, no)
     ####GENERATE STRONGLY CONNECTED GRAPH ALG2####
 
     ####GENERATE STRONGLY CONNECTED GRAPH####
@@ -602,7 +620,7 @@ def main():
         #gv_draw(strong_graph)
         text_print(strong_graph, no_states, density, card_alphabet)
         outer_frequency(strong_graph, 100)
-        write_to_file(strong_graph, no_states, density, card_alphabet, alg)
+        write_to_file(strong_graph, no_states, density, card_alphabet, alg, no)
     ####GENERATE STRONGLY CONNECTED GRAPH####
     
 
@@ -611,7 +629,7 @@ def main():
         graph, lib_graph, max_outer = generate_weakly_connected_graph(no_states, no_edges, density, card_alphabet)
         outer_frequency(graph, max_outer)
         #gv_draw(graph)
-        write_to_file(graph, no_states, density, card_alphabet, alg)
+        write_to_file(graph, no_states, density, card_alphabet, alg, no)
         
     #gt_draw(lib_graph)
     #prop_map, array = graph_tool.topology.label_components(lib_graph)
@@ -633,8 +651,9 @@ if __name__ == '__main__':
     density = float(sys.argv[2])
     card_alphabet = int(sys.argv[3])
     alg = sys.argv[4]
+    no = sys.argv[5]
     
-    main()
+    main(no_states, density, card_alphabet, alg, no)
     
 
     
