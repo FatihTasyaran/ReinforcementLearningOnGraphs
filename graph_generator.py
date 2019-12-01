@@ -156,10 +156,12 @@ def generate_weakly_connected_graph(no_states, no_edges, density, card_alphabet)
     for i in range(no_faulty):
         fault_loc = node(no_states)
         graph[fault_loc]['Faulty'] = True
-        
+
+    '''
     for item in graph:
         print("###", item['State'], "###")
         print(item, '\n')
+    '''
 
     graph_prop = '# of Nodes: ' + str(no_states) + ' Density: ' + str(density) + ' Alphabet Cardinality: ' + str(card_alphabet)
     print(graph_prop)
@@ -564,7 +566,8 @@ def strongly_connected_alg2(no_states, no_edges, density, card_alphabet):
 def write_to_file(graph, no_states, density, card_alphabet, alg, no):
     print('Writing to file')
     filename = str(no_states) + '_' + str(density) + '_' + str(card_alphabet) + '_' + alg + '_' +'#'+ no +'.csv'
-    filepath = 'graphs/'
+    #filepath = 'graphs/'
+    filepath = 'generating/'
     wrt = open(filepath+filename, 'w+')
 
     for state in graph:
@@ -609,7 +612,7 @@ def main(no_states, density, card_alphabet, alg, no):
     if(alg == 'strong2'):
         strong_graph_2 = strongly_connected_alg2(no_states, no_edges, density, card_alphabet)
         #gv_draw(strong_graph_2)
-        text_print(strong_graph_2, no_states, density, card_alphabet)
+        #text_print(strong_graph_2, no_states, density, card_alphabet)
         #outer_frequency(strong_graph_2, 100)
         write_to_file(strong_graph_2, no_states, density, card_alphabet, alg, no)
     ####GENERATE STRONGLY CONNECTED GRAPH ALG2####
@@ -618,7 +621,7 @@ def main(no_states, density, card_alphabet, alg, no):
     elif(alg == 'strong'):
         strong_graph = generate_strongly_connected_graph(no_states, no_edges, density, card_alphabet)
         #gv_draw(strong_graph)
-        text_print(strong_graph, no_states, density, card_alphabet)
+        #text_print(strong_graph, no_states, density, card_alphabet)
         #outer_frequency(strong_graph, 100)
         write_to_file(strong_graph, no_states, density, card_alphabet, alg, no)
     ####GENERATE STRONGLY CONNECTED GRAPH####
