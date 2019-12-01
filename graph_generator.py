@@ -12,6 +12,30 @@ def node(no_states):
 def action(card_alphabet):
     return random.randint(0, card_alphabet-1)
 
+def add_to_graph(graph, out_node, in_node, card_alphabet):
+    out_state = 'S' + str(out_node)
+    in_state = 'S' + str(in_node)
+
+    actions = []
+    for i in range(card_alphabet):
+        actions.append(i)
+
+    for i in range(len(graph[out_node]['Outgoing_edges'])):
+        actions.remove(graph[out_node]['Outgoing_edges'][i][1])
+
+    print("WILL CHOOSE FROM:" ,len(graph[out_node]['Outgoing_edges']), "WHERE MAX CARDINALITY IS:", card_alphabet)
+    try:
+        act = random.choice(actions)
+        print('I chose:', act)
+        graph[out_node]['Outgoing_edges'].append((in_state, act))
+        graph[in_node]['Incoming_edges'].append((out_state, act))
+        return 1
+    except:
+        print("State:", out_state, "Failed to find Action")
+        return 0
+
+
+
 def generate_weakly_connected_graph(no_states, no_edges, density, card_alphabet):
 
     graph = [{} for i in range(no_states)]
@@ -41,8 +65,9 @@ def generate_weakly_connected_graph(no_states, no_edges, density, card_alphabet)
     while(len(unconnected) > 0):
         c = random.choice(connected)
         u = random.choice(unconnected)
-        graph[int(c[1:])]['Outgoing_edges'].append((u,action(card_alphabet)))
-        graph[int(u[1:])]['Incoming_edges'].append((c,action(card_alphabet)))
+        #graph[int(c[1:])]['Outgoing_edges'].append((u,action(card_alphabet)))
+        #graph[int(u[1:])]['Incoming_edges'].append((c,action(card_alphabet)))
+        add_to_graph(graph, int(c[1:]), int(u[1:]), card_alphabet)
         connected.append(u)
         unconnected.remove(u)
 
@@ -92,8 +117,9 @@ def generate_weakly_connected_graph(no_states, no_edges, density, card_alphabet)
             continue
     
         try:
-            graph[int(out_node[1:])]['Outgoing_edges'].append((in_node,action(card_alphabet)))
-            graph[int(in_node[1:])]['Incoming_edges'].append((out_node,action(card_alphabet)))
+            #graph[int(out_node[1:])]['Outgoing_edges'].append((in_node,action(card_alphabet)))
+            #graph[int(in_node[1:])]['Incoming_edges'].append((out_node,action(card_alphabet)))
+            add_to_graph(graph, int(out_node[1:]), int(in_node[1:]), card_alphabet)
         except:
             print("ERROR:", out_node)
 
@@ -206,34 +232,7 @@ def gv_draw(graph):
 
     dot.render('test-output/round-table.gv', view=True)
 
-def add_to_graph(graph, out_node, in_node, card_alphabet):
-    out_state = 'S' + str(out_node)
-    in_state = 'S' + str(in_node)
-
-    actions = []
-    for i in range(card_alphabet):
-        actions.append(i)
-
-    for i in range(len(graph[out_node]['Outgoing_edges'])):
-        actions.remove(graph[out_node]['Outgoing_edges'][i][1])
-
-    print("WILL CHOOSE FROM:" ,len(graph[out_node]['Outgoing_edges']), "WHERE MAX CARDINALITY IS:", card_alphabet)
-    try:
-        act = random.choice(actions)
-        print('I chose:', act)
-        graph[out_node]['Outgoing_edges'].append((in_state, act))
-        graph[in_node]['Incoming_edges'].append((out_state, act))
-        return 1
-    except:
-        print("State:", out_state, "Failed to find Action")
-        return 0
-
-        
-        
     
-        
-
-
 ##PRECONDITION: ONLY TO BE APPLIED TO RANDOM EDGES WHICH WILL NOT VIOLATE STRONGLY CONNECTED PROPERTY
 ##POSTCONDITION: WILL RETURN A STATE THAT OUT_NODE HAVE NO OUTGOING EDGE
 def multi_transition_check(graph, out_node, in_node, no_states):
