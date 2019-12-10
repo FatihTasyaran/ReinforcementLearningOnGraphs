@@ -4,6 +4,7 @@ from graph_tool.all import *
 import matplotlib.pyplot as plt
 import math
 import networkx as nx
+import graph_generator
 
 def read_from_file(filename):
     rdr = open(filename, 'r')
@@ -119,16 +120,17 @@ def assure_DFA(graph):
 
     return DFA
                 
-    
+def return_graph(filename):
+    return read_from_file(filename)
         
 
 def main():
     filename = sys.argv[1]
     graph = read_from_file(filename)
-    #gt_graph = convert_to_graphtools(graph)
-    #gt_draw(gt_graph)
+    gt_graph = convert_to_graphtools(graph)
+    graph_generator.gt_draw(gt_graph)
     #checked = extract_largest_component(gt_graph, directed=True, prune=True)
-    #gt_draw(checked)
+    gt_draw(gt_graph)
 
     nx_graph = convert_to_networkX(graph)
 
@@ -139,6 +141,8 @@ def main():
         print("GRAPH IS NOT A DFA")
         
     print('#Nodes:', len(nx_graph), 'Is strongly connected:', nx.is_strongly_connected(nx_graph))
+
+    
 
 
 if __name__ == '__main__':

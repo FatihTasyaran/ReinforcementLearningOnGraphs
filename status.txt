@@ -1,2 +1,36 @@
 Starting!
 
+Big Sparse Weak Done!
+
+Big Sparse Strong Done!
+
+Big Sparse Strong2 Done!
+
+Big Dense Strong Done!
+
+Big Dense Strong2 Done!
+
+Small Sparse Weak Done!
+
+Small Sparse Strong Done!
+
+Small Sparse Strong2 Done!
+
+Small Dense Weak Done!
+
+Small Dense Strong Done!
+
+Small Dense Strong2 Done!
+
+Small Sparse Weak Done!
+
+Small Sparse Strong Done!
+
+Small Sparse Strong2 Done!
+
+Small Dense Weak Done!
+
+Small Dense Strong Done!
+
+Small Dense Strong2 Done!
+

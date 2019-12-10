@@ -456,7 +456,10 @@ def generate_strongly_connected_graph(no_states, no_edges, density, card_alphabe
 
             while(unsuccess):
                 if(not dense_sanity_check(graph, out_node, in_node)):
-                    in_node = random.choice(cluster)
+                    try:
+                        in_node = random.choice(cluster)
+                    except:
+                        print('Skipping..')
                 else:
                     unsuccess = False
             
@@ -567,7 +570,7 @@ def write_to_file(graph, no_states, density, card_alphabet, alg, no):
     print('Writing to file')
     filename = str(no_states) + '_' + str(density) + '_' + str(card_alphabet) + '_' + alg + '_' +'#'+ no +'.csv'
     #filepath = 'graphs/'
-    filepath = 'generating/'
+    filepath = '10s/'
     wrt = open(filepath+filename, 'w+')
 
     for state in graph:

@@ -1,5 +1,0 @@
-S0,Out,S2,3,S4,5,In,S2,5,S1,3,False
-S1,Out,S3,1,S0,3,In,S4,5,False
-S2,Out,S0,5,In,S0,3,False
-S3,Out,S4,3,In,S1,1,False
-S4,Out,S1,5,In,S3,3,S0,5,False

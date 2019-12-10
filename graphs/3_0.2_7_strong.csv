@@ -1,3 +1,0 @@
-S0,Out,S2,6,S0,5,In,S1,5,S0,5,False
-S1,Out,S0,5,In,S2,2,False
-S2,Out,S1,2,In,S0,6,False
