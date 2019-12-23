@@ -56,6 +56,7 @@ def choose_action(graph, state, q_table, rewards):
 
     if(val < epsilon):
         action = random.choice(possible_actions)
+    '''
     else:
         val = -100
         for i in range(len(q_table[state])):
@@ -63,6 +64,8 @@ def choose_action(graph, state, q_table, rewards):
                 if(q_table[state][i] >= val):
                     val = q_table[state][i]
                     action = i
+     '''
+    else:
         
 
     epsilon = epsilon - 0.01
