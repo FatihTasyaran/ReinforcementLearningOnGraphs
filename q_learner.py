@@ -49,7 +49,7 @@ def choose_action(graph, state, q_table, rewards):
 
     global epsilon
     
-    val = random.randint(0, 1000)
+    val = random.randint(0, 1000)/1000
     #print('val:', val)
 
     possible_actions_list = []
@@ -66,7 +66,11 @@ def choose_action(graph, state, q_table, rewards):
     else:
         #action = int(max(possible_actions, key=int))
         action = int(max(possible_actions.items(), key=operator.itemgetter(1))[0])
+        act_val = int(max(possible_actions.items(), key=operator.itemgetter(1))[1])
+        rand = random.choice(list(possible_actions.items()))
+        print('Rand:', rand)
         print('Best among them: ', action)
+        print('Difference:', act_val - rand[1])
         #print('Best Among:', max(possible_actions, key=int))
     '''
     else:
@@ -113,7 +117,7 @@ def q_learn(graph, card_alphabet, rewards, start_state, filename):
             q_table[node][item] = '-'
 
 
-    epoch = 10000
+    epoch = 1000
 
     x = []
     total_at_end = []
@@ -164,7 +168,7 @@ def q_learn(graph, card_alphabet, rewards, start_state, filename):
             #time.sleep(1)
             
                 
-                
+    print_q_table(q_table)
     ##START LEARNING##
     plt.subplot(2,1,1)
     plt.plot(x, total_at_end, label = 'Total Reward', color='black')
@@ -190,9 +194,9 @@ def main():
 
     for i in range(len(graph)):
         if(graph[i]['Faulty'] == True):
-            rewards.append(100)
+            rewards.append(20)
         else:
-            rewards.append(-2)
+            rewards.append(-1)
 
     #print('Rewards:', rewards)
     
@@ -201,7 +205,7 @@ def main():
     ###
     card_alphabet = 11
     #start = random.randint(0, len(graph))
-    start = 45
+    start = 22
     q_learn(graph, card_alphabet, rewards, start, '10s/15_0.7_11_strong2_#4.csv')
     #print(graph)
 
