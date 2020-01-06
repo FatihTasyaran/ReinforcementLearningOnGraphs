@@ -2,12 +2,13 @@ import graph_reader
 import random
 import os
 import time
+import matplotlib.pyplot as plt
 
-max_episode = 50
+max_episode = 100
 learning_rate = 0.9
 discount = 0.9
 epsilon = 1 ##Start with exploration
-decay_rate = 0.1#1/(max_episode-25) ##First half of episodes favor exploration,
+decay_rate = 1/(max_episode) ##First half of episodes favor exploration,
                                ##Second half favor exploitation
 
 def calculate_new_q(rewards, q_table, action, old_state, new_state):
@@ -68,6 +69,9 @@ def q_learn(rewards, framework_graph, graph, q_table, start):
     global epsilon
     global decay_rate
 
+    total_rewards = []
+    found_in = []
+    eps = []
     
     for episode in range(max_episode):
         state = start
@@ -82,7 +86,7 @@ def q_learn(rewards, framework_graph, graph, q_table, start):
                 if(graph[state][0][le][1] == action):
                     new = graph[state][0][le][0]
 
-            #print(state, '->', new)
+            print(state, '->', new)
             calculate_new_q(rewards, q_table, action, state, new)
             state = new
             
@@ -94,7 +98,41 @@ def q_learn(rewards, framework_graph, graph, q_table, start):
             time_step += 1
                 
         epsilon -= decay_rate
-        #time.sleep(0.1)
+        #print(q_table)
+
+        ####CALCULATING TOTAL REWARD AT THE END OF THE EPISODE####
+        tot_reward = 0
+        for i in range(len(q_table)):
+            for j in range(len(q_table[0])):
+                if(q_table[i][j] != 'NA'):
+                    tot_reward += q_table[i][j]
+        total_rewards.append(tot_reward)
+        found_in.append(time_step)
+        eps.append(epsilon)
+        print('Total Reward:', tot_reward)
+        ####CALCULATING TOTAL REWARD AT THE END OF THE EPISODE####
+
+
+    ####DRAWING # OF TIME STEPS VS EPISODES AND REWARD####
+    x = []
+    for i in range(max_episode):
+        x.append(i)
+        
+    plt.subplot(3,1,1)
+    plt.plot(x, total_rewards, label = 'Total Reward', color='black')
+    plt.ylabel('Total Reward')
+
+    plt.subplot(3,1,2)
+    plt.plot(x, found_in, label = 'Time Steps', color='red')
+    plt.ylabel('Found in Time Steps')
+
+    plt.subplot(3,1,3)
+    plt.plot(x, eps, label = 'Epsilon', color='cyan')
+    plt.ylabel('Epsilon Change')
+    
+    plt.show()
+    ####DRAWING # OF TIME STEPS VS EPISODES AND REWARD####
+        
 
 def convert_to_list_representation(framework_graph):
     print(framework_graph[0])
@@ -165,7 +203,7 @@ def main():
 
 
     ##START ALGORITHM##
-    q_learn(rewards, framework_graph, graph, q_table, 9)
+    q_learn(rewards, framework_graph, graph, q_table, 7)
     ##START ALGORITHM##
 
 
