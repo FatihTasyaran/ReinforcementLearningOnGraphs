@@ -148,7 +148,8 @@ def generate_weakly_connected_graph(no_states, no_edges, density, card_alphabet)
         except:
             print("ERROR:", out_node)
 
-    no_faulty = no_states*0.05
+    #no_faulty = no_states*0.05
+    no_faulty = 1
     no_faulty = int(no_faulty)
     if (no_faulty == 0):
         no_faulty = 1
@@ -470,7 +471,8 @@ def generate_strongly_connected_graph(no_states, no_edges, density, card_alphabe
         print('remaining_edges:', remaining_edges)
 
     
-    no_faulty = no_states*0.05
+    #no_faulty = no_states*0.05
+    no_faulty = 1
     no_faulty = int(no_faulty)
     if (no_faulty == 0):
         no_faulty = 1
@@ -571,7 +573,7 @@ def write_to_file(graph, no_states, density, card_alphabet, alg, no):
     print('Writing to file')
     filename = str(no_states) + '_' + str(density) + '_' + str(card_alphabet) + '_' + alg + '_' +'#'+ no +'.csv'
     #filepath = 'graphs/'
-    filepath = '10s/'
+    filepath = 'generating4/'
     wrt = open(filepath+filename, 'w+')
 
     for state in graph:

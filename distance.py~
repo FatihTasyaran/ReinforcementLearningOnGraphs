@@ -1,0 +1,16 @@
+import graph_reader
+import networkx as nx
+
+
+graph = graph_reader.return_graph('generating2/400_0.2_10_strong2_#4.csv')
+nx_graph = graph_reader.convert_to_networkX(graph)
+
+
+'''
+for i in range(400):
+    dist = nx.shortest_path_length(nx_graph,source=i,target=20)
+    #if(dist > 10):
+    print(dist)
+'''
+
+

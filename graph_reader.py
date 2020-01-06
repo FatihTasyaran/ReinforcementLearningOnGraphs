@@ -20,7 +20,7 @@ def read_from_file(filename):
 
     for l in range(len(whole)):
         line = whole[l]
-        print('line:', line)
+        #print('line:', line)
         info = line.split(',')
 
         graph[l]['State'] = info[0]
@@ -77,7 +77,7 @@ def convert_to_networkX(graph):
     
 #def convert_to_networkX():
 def gt_draw(gt_graph):
-    print("Drawing with graphtools")
+    #print("Drawing with graphtools")
     pos = arf_layout(gt_graph, max_iter=0)
     graph_draw(gt_graph, pos=pos, output="tryer.pdf")
     
