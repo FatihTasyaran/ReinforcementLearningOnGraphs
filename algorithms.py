@@ -181,6 +181,7 @@ def q_learn(rewards, framework_graph, graph, q_table, start):
 
 
     ####DRAWING # OF TIME STEPS VS EPISODES AND REWARD####
+    '''
     x = []
     for i in range(max_episode):
         x.append(i)
@@ -200,7 +201,7 @@ def q_learn(rewards, framework_graph, graph, q_table, start):
 
     plt.tight_layout()
     plt.show()
-
+    '''
     return total_rewards, found_in, eps
     ####DRAWING # OF TIME STEPS VS EPISODES AND REWARD####
 
@@ -255,7 +256,7 @@ def sarsa(rewards, framework_graph, graph, q_table, start):
         print('Total Reward:', tot_reward)
         ####CALCULATING TOTAL REWARD AT THE END OF THE EPISODE####
 
-
+    '''
     ####DRAWING # OF TIME STEPS VS EPISODES AND REWARD####
     x = []
     for i in range(max_episode):
@@ -276,6 +277,7 @@ def sarsa(rewards, framework_graph, graph, q_table, start):
 
     plt.tight_layout()
     plt.show()
+    '''
 
     return total_rewards, found_in, eps
     ####DRAWING # OF TIME STEPS VS EPISODES AND REWARD####
@@ -340,6 +342,7 @@ def q_learn_varying_depth(rewards, framework_graph, graph, q_table, start):
 
 
     ####DRAWING # OF TIME STEPS VS EPISODES AND REWARD####
+    '''
     x = []
     for i in range(max_episode):
         x.append(i)
@@ -359,6 +362,7 @@ def q_learn_varying_depth(rewards, framework_graph, graph, q_table, start):
 
     plt.tight_layout()
     plt.show()
+    '''
     return total_rewards, found_in, eps
     ####DRAWING # OF TIME STEPS VS EPISODES AND REWARD####
 
@@ -420,6 +424,7 @@ def q_learn_constant_depth(rewards, framework_graph, graph, q_table, start):
 
 
     ####DRAWING # OF TIME STEPS VS EPISODES AND REWARD####
+    '''
     x = []
     for i in range(max_episode):
         x.append(i)
@@ -439,6 +444,7 @@ def q_learn_constant_depth(rewards, framework_graph, graph, q_table, start):
 
     plt.tight_layout()
     plt.show()
+    '''
     return total_rewards, found_in, eps
     ####DRAWING # OF TIME STEPS VS EPISODES AND REWARD####
         
@@ -499,10 +505,8 @@ def get_rewards(framework_graph):
 def main():
     
     ##READING THE GRAPH##
-    framework_graph = graph_reader.return_graph('10s/55_0.3_8_strong2_#4.csv')
-    #framework_graph = graph_reader.return_graph('generating2/96000_0.2_25_strong2_#2.csv')
-    #framework_graph = graph_reader.return_graph('generating3/180000_0.2_25_strong2_#2.csv')
-    alphabet_card = 8
+    framework_graph = graph_reader.return_graph('generating4/20_0.2_10_strong2_#1.csv')
+    alphabet_card = 10
     ##READING THE GRAPH##
 
     ##CONVERTING GRAPH REPRESENTATION##
@@ -512,100 +516,31 @@ def main():
     global epsilon
     global decay_rate
 
-    #####ONE EXPERIMENT RUNTIME SARSA#####
-    epsilon = 1
-    q_table = empty_q_table(graph, alphabet_card)
-    rewards = get_rewards(framework_graph)
-    s_tot, s_found, eps = sarsa(rewards, framework_graph, graph, q_table, 0)
-    #####ONE EXPERIMENT RUNTIME SARSA#####
-
-    #####ONE EXPERIMENT RUNTIME Q_LEARN#####
-    epsilon = 1
-    q_table = empty_q_table(graph, alphabet_card)
-    rewards = get_rewards(framework_graph)
-    q_tot, q_found, eps = q_learn(rewards, framework_graph, graph, q_table, 0)
-    #####ONE EXPERIMENT RUNTIME Q_LEARN#####
-
-    #####ONE EXPERIMENT RUNTIME Q_LEARN WITH CONSTANT DEPTH#####
-    epsilon = 1
-    q_table = empty_q_table(graph, alphabet_card)
-    rewards = get_rewards(framework_graph)
-    c_tot, c_found, eps = q_learn_constant_depth(rewards, framework_graph, graph, q_table, 0)
-    #####ONE EXPERIMENT RUNTIME Q_LEARN WITH CONSTANT DEPTH#####
-
-    #####ONE EXPERIMENT RUNTIME Q_LEARN VARYING DEPTH#####
-    epsilon = 1
-    q_table = empty_q_table(graph, alphabet_card)
-    rewards = get_rewards(framework_graph)
-    v_tot, v_found, eps = q_learn_varying_depth(rewards, framework_graph, graph, q_table, 0)
-    #####ONE EXPERIMENT RUNTIME Q_LEARN VARYING DEPTH#####
-
-    x = []
-    for i in range(max_episode):
-        x.append(i)
-
-        
-    plt.subplot(3,1,1)
-    plt.title('55_0.3_8_strong2_#4.csv, Decaying Epsilon Greedy')
-    plt.plot(x, s_tot, label = 'Sarsa', color='black')
-    plt.plot(x, q_tot, label = 'Q Learner', color='cyan')
-    plt.plot(x, c_tot, label = 'Q Constant Depth', color='green')
-    plt.plot(x, v_tot, label = 'Q Varying Depth', color='red')
-    plt.ylabel('Total Reward')
-    plt.legend()
-
-    plt.subplot(3,1,2)
-    plt.plot(x, s_found, label = 'Sarsa', color='black')
-    plt.plot(x, q_found, label = 'Q Learner', color='cyan')
-    plt.plot(x, c_found, label = 'Q Constant Depth', color='green')
-    plt.plot(x, v_found, label = 'Q Varying Depth', color='red')
-    plt.ylabel('Found in Time Steps')
-    plt.legend()
-
-    plt.subplot(3,1,3)
-    plt.plot(x, eps, label = 'Epsilon', color='red')
-    plt.ylabel('Epsilon Change')
-    plt.legend()
-
-    plt.tight_layout()
-    plt.show()
-
-
-    ###SECOND RUN EPSILON GREEDY###
-    ###SECOND RUN EPSILON GREEDY###
-    ###SECOND RUN EPSILON GREEDY###
-    ###SECOND RUN EPSILON GREEDY###
-    ###SECOND RUN EPSILON GREEDY###
-
     epsilon = 0.01
     decay_rate = 0
 
     #####ONE EXPERIMENT RUNTIME SARSA#####
-    
     q_table = empty_q_table(graph, alphabet_card)
     rewards = get_rewards(framework_graph)
-    s_tot, s_found, eps = sarsa(rewards, framework_graph, graph, q_table, 0)
+    s_tot, s_found, eps = sarsa(rewards, framework_graph, graph, q_table, 10)
     #####ONE EXPERIMENT RUNTIME SARSA#####
 
     #####ONE EXPERIMENT RUNTIME Q_LEARN#####
-    
     q_table = empty_q_table(graph, alphabet_card)
     rewards = get_rewards(framework_graph)
-    q_tot, q_found, eps = q_learn(rewards, framework_graph, graph, q_table, 0)
+    q_tot, q_found, eps = q_learn(rewards, framework_graph, graph, q_table, 10)
     #####ONE EXPERIMENT RUNTIME Q_LEARN#####
 
     #####ONE EXPERIMENT RUNTIME Q_LEARN WITH CONSTANT DEPTH#####
-    
     q_table = empty_q_table(graph, alphabet_card)
     rewards = get_rewards(framework_graph)
-    c_tot, c_found, eps = q_learn_constant_depth(rewards, framework_graph, graph, q_table, 0)
+    c_tot, c_found, eps = q_learn_constant_depth(rewards, framework_graph, graph, q_table, 10)
     #####ONE EXPERIMENT RUNTIME Q_LEARN WITH CONSTANT DEPTH#####
 
     #####ONE EXPERIMENT RUNTIME Q_LEARN VARYING DEPTH#####
-    
     q_table = empty_q_table(graph, alphabet_card)
     rewards = get_rewards(framework_graph)
-    v_tot, v_found, eps = q_learn_varying_depth(rewards, framework_graph, graph, q_table, 0)
+    v_tot, v_found, eps = q_learn_varying_depth(rewards, framework_graph, graph, q_table, 10)
     #####ONE EXPERIMENT RUNTIME Q_LEARN VARYING DEPTH#####
 
     x = []
@@ -614,7 +549,7 @@ def main():
 
         
     plt.subplot(3,1,1)
-    plt.title('55_0.3_8_strong2_#4.csv, Epsilon Greedy 0.01')
+    plt.title('20_0.2_10_strong2_#1.csv, Epsilon Greedy 0.01')
     plt.plot(x, s_tot, label = 'Sarsa', color='black')
     plt.plot(x, q_tot, label = 'Q Learner', color='cyan')
     plt.plot(x, c_tot, label = 'Q Constant Depth', color='green')
@@ -636,43 +571,71 @@ def main():
     plt.legend()
 
     plt.tight_layout()
-    plt.show()
+    #plt.show()
+    plt.savefig('20_0.2_10_strong2_#1.csv_Epsilon_Greedy_0.01.pdf')
 
-    ###THIRD RUN EPSILON GREEDY###
-    ###THIRD RUN EPSILON GREEDY###
-    ###THIRD RUN EPSILON GREEDY###
-    ###THIRD RUN EPSILON GREEDY###
-    ###THIRD RUN EPSILON GREEDY###
+    s_converge = 0
+    q_converge = 0
+    c_converge = 0
+    v_converge = 0
 
-    epsilon = 0.001
-    decay_rate = 0
+    
+    for i in range(0,175):
+        s_converge += s_found[i]
+
+    for i in range(0,175):
+        q_converge += q_found[i]
+
+    for i in range(0,175):
+        c_converge += c_found[i]
+
+    for i in range(0,175):
+        v_converge = v_found[i]
+
+
+    converges = [s_converge, q_converge, c_converge, v_converge]
+
+    xx = ['SARSA', 'Q_LEARNER', 'CONSTANT DEPTH Q', 'VARYING DEPTH Q']
+    collors = ['black', 'cyan', 'green', 'red']
+    fig, ax = plt.subplots(1, 1)
+    ax.bar(xx, converges, color=collors)
+    plt.tight_layout()
+    plt.title('Steps to Converge')
+    plt.savefig('1.pdf')
+
+    ######DECAY
+
+
+
+    epsilon = 1
+    decay_rate = 1/(max_episode-(max_episode/4))
 
     #####ONE EXPERIMENT RUNTIME SARSA#####
-    
+    epsilon = 1
     q_table = empty_q_table(graph, alphabet_card)
     rewards = get_rewards(framework_graph)
-    s_tot, s_found, eps = sarsa(rewards, framework_graph, graph, q_table, 0)
+    s_tot, s_found, eps = sarsa(rewards, framework_graph, graph, q_table, 10)
     #####ONE EXPERIMENT RUNTIME SARSA#####
 
     #####ONE EXPERIMENT RUNTIME Q_LEARN#####
-    
+    epsilon = 1
     q_table = empty_q_table(graph, alphabet_card)
     rewards = get_rewards(framework_graph)
-    q_tot, q_found, eps = q_learn(rewards, framework_graph, graph, q_table, 0)
+    q_tot, q_found, eps = q_learn(rewards, framework_graph, graph, q_table, 10)
     #####ONE EXPERIMENT RUNTIME Q_LEARN#####
 
     #####ONE EXPERIMENT RUNTIME Q_LEARN WITH CONSTANT DEPTH#####
-    
+    epsilon = 1
     q_table = empty_q_table(graph, alphabet_card)
     rewards = get_rewards(framework_graph)
-    c_tot, c_found, eps = q_learn_constant_depth(rewards, framework_graph, graph, q_table, 0)
+    c_tot, c_found, eps = q_learn_constant_depth(rewards, framework_graph, graph, q_table, 10)
     #####ONE EXPERIMENT RUNTIME Q_LEARN WITH CONSTANT DEPTH#####
 
     #####ONE EXPERIMENT RUNTIME Q_LEARN VARYING DEPTH#####
-    
+    epsilon = 1
     q_table = empty_q_table(graph, alphabet_card)
     rewards = get_rewards(framework_graph)
-    v_tot, v_found, eps = q_learn_varying_depth(rewards, framework_graph, graph, q_table, 0)
+    v_tot, v_found, eps = q_learn_varying_depth(rewards, framework_graph, graph, q_table, 10)
     #####ONE EXPERIMENT RUNTIME Q_LEARN VARYING DEPTH#####
 
     x = []
@@ -681,7 +644,7 @@ def main():
 
         
     plt.subplot(3,1,1)
-    plt.title('55_0.3_8_strong2_#4.csv, Epsilon Greedy 0.001')
+    plt.title('20_0.2_10_strong2_#1.csv, Decaying Epsilon')
     plt.plot(x, s_tot, label = 'Sarsa', color='black')
     plt.plot(x, q_tot, label = 'Q Learner', color='cyan')
     plt.plot(x, c_tot, label = 'Q Constant Depth', color='green')
@@ -703,50 +666,78 @@ def main():
     plt.legend()
 
     plt.tight_layout()
-    plt.show()
+    #plt.show()
+    plt.savefig('20_0.2_10_strong2_#1.csv_Epsilon_Decaying.pdf')
 
-    #####BIGGER####
-    #####BIGGER####
-    #####BIGGER####
-    #####BIGGER####
+    s_converge = max_episode
+    q_converge = max_episode
+    c_converge = max_episode
+    v_converge = max_episode
+
     
+    for i in range(5,max_episode):
+        if(s_tot[i] == s_tot[i-1] and s_tot[i] == s_tot[i-2] and s_tot[i] == s_tot[i-3]):
+            s_converge = i
 
-    
+    for i in range(5,max_episode):
+        if(q_tot[i] == q_tot[i-1] and q_tot[i] == q_tot[i-2] and q_tot[i] == q_tot[i-3] ):
+            q_converge = i
 
-    framework_graph = graph_reader.return_graph('generating3/180000_0.2_25_strong2_#2.csv')
-    alphabet_card = 25
+    for i in range(5,max_episode):
+        if(c_tot[i] == c_tot[i-1] and c_tot[i] == c_tot[i-2] and c_tot[i] == c_tot[i-3] ):
+            c_converge = i
+
+    for i in range(5,max_episode):
+        if(v_tot[i] == v_tot[i-1] and v_tot[i] == v_tot[i-2] and v_tot[i] == v_tot[i-3]):
+            v_converge = i
+
+
+    converges = [s_converge, q_converge, c_converge, v_converge]
+
+    xx = ['SARSA', 'Q_LEARNER', 'CONSTANT DEPTH Q', 'VARYING DEPTH Q']
+    collors = ['black', 'cyan', 'green', 'red']
+    fig, ax = plt.subplots(1, 1)
+    ax.bar(xx, converges, color=collors)
+    plt.tight_layout()
+    #plt.show()
+
+    ####MEDIUM
+
+    ##READING THE GRAPH##
+    framework_graph = graph_reader.return_graph('generating4/200_0.2_15_strong2_#1.csv')
+    alphabet_card = 15
     ##READING THE GRAPH##
 
     ##CONVERTING GRAPH REPRESENTATION##
     graph = convert_to_list_representation(framework_graph)
     ##CONVERTING GRAPH REPRESENTATION##
 
-    #####ONE EXPERIMENT RUNTIME SARSA#####
     
+    epsilon = 0.01
+    decay_rate = 0
+
+    #####ONE EXPERIMENT RUNTIME SARSA#####
     q_table = empty_q_table(graph, alphabet_card)
     rewards = get_rewards(framework_graph)
-    s_tot, s_found, eps = sarsa(rewards, framework_graph, graph, q_table, 0)
+    s_tot, s_found, eps = sarsa(rewards, framework_graph, graph, q_table, 10)
     #####ONE EXPERIMENT RUNTIME SARSA#####
 
     #####ONE EXPERIMENT RUNTIME Q_LEARN#####
-    
     q_table = empty_q_table(graph, alphabet_card)
     rewards = get_rewards(framework_graph)
-    q_tot, q_found, eps = q_learn(rewards, framework_graph, graph, q_table, 0)
+    q_tot, q_found, eps = q_learn(rewards, framework_graph, graph, q_table, 10)
     #####ONE EXPERIMENT RUNTIME Q_LEARN#####
 
     #####ONE EXPERIMENT RUNTIME Q_LEARN WITH CONSTANT DEPTH#####
-    
     q_table = empty_q_table(graph, alphabet_card)
     rewards = get_rewards(framework_graph)
-    c_tot, c_found, eps = q_learn_constant_depth(rewards, framework_graph, graph, q_table, 0)
+    c_tot, c_found, eps = q_learn_constant_depth(rewards, framework_graph, graph, q_table, 10)
     #####ONE EXPERIMENT RUNTIME Q_LEARN WITH CONSTANT DEPTH#####
 
     #####ONE EXPERIMENT RUNTIME Q_LEARN VARYING DEPTH#####
-    
     q_table = empty_q_table(graph, alphabet_card)
     rewards = get_rewards(framework_graph)
-    v_tot, v_found, eps = q_learn_varying_depth(rewards, framework_graph, graph, q_table, 0)
+    v_tot, v_found, eps = q_learn_varying_depth(rewards, framework_graph, graph, q_table, 10)
     #####ONE EXPERIMENT RUNTIME Q_LEARN VARYING DEPTH#####
 
     x = []
@@ -755,7 +746,7 @@ def main():
 
         
     plt.subplot(3,1,1)
-    plt.title('generating3/180000_0.2_25_strong2_#2.csv, Epsilon Greedy 0.001')
+    plt.title('200_0.2_15_strong2_#1.csv, Epsilon Greedy 0.01')
     plt.plot(x, s_tot, label = 'Sarsa', color='black')
     plt.plot(x, q_tot, label = 'Q Learner', color='cyan')
     plt.plot(x, c_tot, label = 'Q Constant Depth', color='green')
@@ -777,44 +768,74 @@ def main():
     plt.legend()
 
     plt.tight_layout()
-    plt.show()
+    #plt.show
+    plt.savefig('200_0.2_15_strong2_#1.csv_Epsilon_Greedy_0.01.pdf')
+
+    s_converge = max_episode
+    q_converge = max_episode
+    c_converge = max_episode
+    v_converge = max_episode
+
+    
+    for i in range(5,max_episode):
+        if(s_tot[i] == s_tot[i-1] and s_tot[i] == s_tot[i-2] and s_tot[i] == s_tot[i-3] ):
+            s_converge = i
+
+    for i in range(5,max_episode):
+        if(q_tot[i] == q_tot[i-1] and q_tot[i] == q_tot[i-2] and q_tot[i] == q_tot[i-3] ):
+            q_converge = i
+
+    for i in range(5,max_episode):
+        if(c_tot[i] == c_tot[i-1] and c_tot[i] == c_tot[i-2] and c_tot[i] == c_tot[i-3] ):
+            c_converge = i
+
+    for i in range(5,max_episode):
+        if(v_tot[i] == v_tot[i-1] and v_tot[i] == v_tot[i-2] and v_tot[i] == v_tot[i-3]):
+            v_converge = i
 
 
-    ######DECAYING######
-    ######DECAYING######
-    ######DECAYING######
-    ######DECAYING######
-    ######DECAYING######
+    converges = [s_converge, q_converge, c_converge, v_converge]
 
-    epsilon = 1 ##Start with exploration
-    decay_rate = 1/(max_episode-(max_episode/4)) ##First half of episodes favor exploration,
+    xx = ['SARSA', 'Q_LEARNER', 'CONSTANT DEPTH Q', 'VARYING DEPTH Q']
+    collors = ['black', 'cyan', 'green', 'red']
+    fig, ax = plt.subplots(1, 1)
+    ax.bar(xx, converges, color=collors)
+    plt.tight_layout()
+    #plt.show
+
+    ######DECAY
+
+
+
+    epsilon = 1
+    decay_rate = 1/(max_episode-(max_episode/4))
 
     #####ONE EXPERIMENT RUNTIME SARSA#####
-    
+    epsilon = 1
     q_table = empty_q_table(graph, alphabet_card)
     rewards = get_rewards(framework_graph)
-    s_tot, s_found, eps = sarsa(rewards, framework_graph, graph, q_table, 0)
+    s_tot, s_found, eps = sarsa(rewards, framework_graph, graph, q_table, 10)
     #####ONE EXPERIMENT RUNTIME SARSA#####
 
     #####ONE EXPERIMENT RUNTIME Q_LEARN#####
-    
+    epsilon = 1
     q_table = empty_q_table(graph, alphabet_card)
     rewards = get_rewards(framework_graph)
-    q_tot, q_found, eps = q_learn(rewards, framework_graph, graph, q_table, 0)
+    q_tot, q_found, eps = q_learn(rewards, framework_graph, graph, q_table, 10)
     #####ONE EXPERIMENT RUNTIME Q_LEARN#####
 
     #####ONE EXPERIMENT RUNTIME Q_LEARN WITH CONSTANT DEPTH#####
-    
+    epsilon = 1
     q_table = empty_q_table(graph, alphabet_card)
     rewards = get_rewards(framework_graph)
-    c_tot, c_found, eps = q_learn_constant_depth(rewards, framework_graph, graph, q_table, 0)
+    c_tot, c_found, eps = q_learn_constant_depth(rewards, framework_graph, graph, q_table, 10)
     #####ONE EXPERIMENT RUNTIME Q_LEARN WITH CONSTANT DEPTH#####
 
     #####ONE EXPERIMENT RUNTIME Q_LEARN VARYING DEPTH#####
-    
+    epsilon = 1
     q_table = empty_q_table(graph, alphabet_card)
     rewards = get_rewards(framework_graph)
-    v_tot, v_found, eps = q_learn_varying_depth(rewards, framework_graph, graph, q_table, 0)
+    v_tot, v_found, eps = q_learn_varying_depth(rewards, framework_graph, graph, q_table, 10)
     #####ONE EXPERIMENT RUNTIME Q_LEARN VARYING DEPTH#####
 
     x = []
@@ -823,7 +844,7 @@ def main():
 
         
     plt.subplot(3,1,1)
-    plt.title('generating3/180000_0.2_25_strong2_#2.csv, Epsilon Greedy 0.001')
+    plt.title('200_0.2_15_strong2_#1.csv, Decaying Epsilon')
     plt.plot(x, s_tot, label = 'Sarsa', color='black')
     plt.plot(x, q_tot, label = 'Q Learner', color='cyan')
     plt.plot(x, c_tot, label = 'Q Constant Depth', color='green')
@@ -845,12 +866,440 @@ def main():
     plt.legend()
 
     plt.tight_layout()
-    plt.show()
+    #plt.show()
+    plt.savefig('200_0.2_10_strong2_#1.csv_Decaying.pdf')
+
+    s_converge = max_episode
+    q_converge = max_episode
+    c_converge = max_episode
+    v_converge = max_episode
 
     
+    for i in range(5,max_episode):
+        if(s_tot[i] == s_tot[i-1] and s_tot[i] == s_tot[i-2] and s_tot[i] == s_tot[i-3]):
+            s_converge = i
 
+    for i in range(5,max_episode):
+        if(q_tot[i] == q_tot[i-1] and q_tot[i] == q_tot[i-2] and q_tot[i] == q_tot[i-3] ):
+            q_converge = i
+
+    for i in range(5,max_episode):
+        if(c_tot[i] == c_tot[i-1] and c_tot[i] == c_tot[i-2] and c_tot[i] == c_tot[i-3] ):
+            c_converge = i
+
+    for i in range(5,max_episode):
+        if(v_tot[i] == v_tot[i-1] and v_tot[i] == v_tot[i-2] and v_tot[i] == v_tot[i-3]):
+            v_converge = i
+
+
+    converges = [s_converge, q_converge, c_converge, v_converge]
+
+    xx = ['SARSA', 'Q_LEARNER', 'CONSTANT DEPTH Q', 'VARYING DEPTH Q']
+    collors = ['black', 'cyan', 'green', 'red']
+    fig, ax = plt.subplots(1, 1)
+    ax.bar(xx, converges, color=collors)
+    plt.tight_layout()
+    #plt.show()
+
+
+    ######BIG
+
+    ##READING THE GRAPH##
+    framework_graph = graph_reader.return_graph('generating4/2000_0.2_17_strong2_#1.csv')
+    alphabet_card = 17
+    ##READING THE GRAPH##
+
+    ##CONVERTING GRAPH REPRESENTATION##
+    graph = convert_to_list_representation(framework_graph)
+    ##CONVERTING GRAPH REPRESENTATION##
+
+    epsilon = 0.01
+    decay_rate = 0
+
+    #####ONE EXPERIMENT RUNTIME SARSA#####
+    q_table = empty_q_table(graph, alphabet_card)
+    rewards = get_rewards(framework_graph)
+    s_tot, s_found, eps = sarsa(rewards, framework_graph, graph, q_table, 10)
+    #####ONE EXPERIMENT RUNTIME SARSA#####
+
+    #####ONE EXPERIMENT RUNTIME Q_LEARN#####
+    q_table = empty_q_table(graph, alphabet_card)
+    rewards = get_rewards(framework_graph)
+    q_tot, q_found, eps = q_learn(rewards, framework_graph, graph, q_table, 10)
+    #####ONE EXPERIMENT RUNTIME Q_LEARN#####
+
+    #####ONE EXPERIMENT RUNTIME Q_LEARN WITH CONSTANT DEPTH#####
+    q_table = empty_q_table(graph, alphabet_card)
+    rewards = get_rewards(framework_graph)
+    c_tot, c_found, eps = q_learn_constant_depth(rewards, framework_graph, graph, q_table, 10)
+    #####ONE EXPERIMENT RUNTIME Q_LEARN WITH CONSTANT DEPTH#####
+
+    #####ONE EXPERIMENT RUNTIME Q_LEARN VARYING DEPTH#####
+    q_table = empty_q_table(graph, alphabet_card)
+    rewards = get_rewards(framework_graph)
+    v_tot, v_found, eps = q_learn_varying_depth(rewards, framework_graph, graph, q_table, 10)
+    #####ONE EXPERIMENT RUNTIME Q_LEARN VARYING DEPTH#####
+
+    x = []
+    for i in range(max_episode):
+        x.append(i)
+
+        
+    plt.subplot(3,1,1)
+    plt.title('2000_0.2_17_strong2_#1.csv, Epsilon Greedy 0.01')
+    plt.plot(x, s_tot, label = 'Sarsa', color='black')
+    plt.plot(x, q_tot, label = 'Q Learner', color='cyan')
+    plt.plot(x, c_tot, label = 'Q Constant Depth', color='green')
+    plt.plot(x, v_tot, label = 'Q Varying Depth', color='red')
+    plt.ylabel('Total Reward')
+    plt.legend()
+
+    plt.subplot(3,1,2)
+    plt.plot(x, s_found, label = 'Sarsa', color='black')
+    plt.plot(x, q_found, label = 'Q Learner', color='cyan')
+    plt.plot(x, c_found, label = 'Q Constant Depth', color='green')
+    plt.plot(x, v_found, label = 'Q Varying Depth', color='red')
+    plt.ylabel('Found in Time Steps')
+    plt.legend()
+
+    plt.subplot(3,1,3)
+    plt.plot(x, eps, label = 'Epsilon', color='red')
+    plt.ylabel('Epsilon Change')
+    plt.legend()
+
+    plt.tight_layout()
+    #plt.show()
+    plt.savefig('2000_0.2_10_strong2_#1.csv_Epsilon_Greedy_0.01.pdf')
+
+    s_converge = max_episode
+    q_converge = max_episode
+    c_converge = max_episode
+    v_converge = max_episode
 
     
+    for i in range(5,max_episode):
+        if(s_tot[i] == s_tot[i-1] and s_tot[i] == s_tot[i-2] and s_tot[i] == s_tot[i-3] ):
+            s_converge = i
+
+    for i in range(5,max_episode):
+        if(q_tot[i] == q_tot[i-1] and q_tot[i] == q_tot[i-2] and q_tot[i] == q_tot[i-3] ):
+            q_converge = i
+
+    for i in range(5,max_episode):
+        if(c_tot[i] == c_tot[i-1] and c_tot[i] == c_tot[i-2] and c_tot[i] == c_tot[i-3] ):
+            c_converge = i
+
+    for i in range(5,max_episode):
+        if(v_tot[i] == v_tot[i-1] and v_tot[i] == v_tot[i-2] and v_tot[i] == v_tot[i-3]):
+            v_converge = i
+
+
+    converges = [s_converge, q_converge, c_converge, v_converge]
+
+    xx = ['SARSA', 'Q_LEARNER', 'CONSTANT DEPTH Q', 'VARYING DEPTH Q']
+    collors = ['black', 'cyan', 'green', 'red']
+    fig, ax = plt.subplots(1, 1)
+    ax.bar(xx, converges, color=collors)
+    plt.tight_layout()
+    #plt.show()
+
+    ######DECAY
+
+
+
+    epsilon = 1
+    decay_rate = 1/(max_episode-(max_episode/4))
+
+    #####ONE EXPERIMENT RUNTIME SARSA#####
+    epsilon = 1
+    q_table = empty_q_table(graph, alphabet_card)
+    rewards = get_rewards(framework_graph)
+    s_tot, s_found, eps = sarsa(rewards, framework_graph, graph, q_table, 10)
+    #####ONE EXPERIMENT RUNTIME SARSA#####
+
+    #####ONE EXPERIMENT RUNTIME Q_LEARN#####
+    epsilon = 1
+    q_table = empty_q_table(graph, alphabet_card)
+    rewards = get_rewards(framework_graph)
+    q_tot, q_found, eps = q_learn(rewards, framework_graph, graph, q_table, 10)
+    #####ONE EXPERIMENT RUNTIME Q_LEARN#####
+
+    #####ONE EXPERIMENT RUNTIME Q_LEARN WITH CONSTANT DEPTH#####
+    epsilon = 1
+    q_table = empty_q_table(graph, alphabet_card)
+    rewards = get_rewards(framework_graph)
+    c_tot, c_found, eps = q_learn_constant_depth(rewards, framework_graph, graph, q_table, 10)
+    #####ONE EXPERIMENT RUNTIME Q_LEARN WITH CONSTANT DEPTH#####
+
+    #####ONE EXPERIMENT RUNTIME Q_LEARN VARYING DEPTH#####
+    epsilon = 1
+    q_table = empty_q_table(graph, alphabet_card)
+    rewards = get_rewards(framework_graph)
+    v_tot, v_found, eps = q_learn_varying_depth(rewards, framework_graph, graph, q_table, 10)
+    #####ONE EXPERIMENT RUNTIME Q_LEARN VARYING DEPTH#####
+
+    x = []
+    for i in range(max_episode):
+        x.append(i)
+
+        
+    plt.subplot(3,1,1)
+    plt.title('2000_0.2_17_strong2_#1.csv, Decaying Epsilon')
+    plt.plot(x, s_tot, label = 'Sarsa', color='black')
+    plt.plot(x, q_tot, label = 'Q Learner', color='cyan')
+    plt.plot(x, c_tot, label = 'Q Constant Depth', color='green')
+    plt.plot(x, v_tot, label = 'Q Varying Depth', color='red')
+    plt.ylabel('Total Reward')
+    plt.legend()
+
+    plt.subplot(3,1,2)
+    plt.plot(x, s_found, label = 'Sarsa', color='black')
+    plt.plot(x, q_found, label = 'Q Learner', color='cyan')
+    plt.plot(x, c_found, label = 'Q Constant Depth', color='green')
+    plt.plot(x, v_found, label = 'Q Varying Depth', color='red')
+    plt.ylabel('Found in Time Steps')
+    plt.legend()
+
+    plt.subplot(3,1,3)
+    plt.plot(x, eps, label = 'Epsilon', color='red')
+    plt.ylabel('Epsilon Change')
+    plt.legend()
+
+    plt.tight_layout()
+    #plt.show()
+    plt.savefig('20_0.2_10_strong2_#1.csv_Decaying.pdf')
+
+    s_converge = max_episode
+    q_converge = max_episode
+    c_converge = max_episode
+    v_converge = max_episode
+
+    
+    for i in range(5,max_episode):
+        if(s_tot[i] == s_tot[i-1] and s_tot[i] == s_tot[i-2] and s_tot[i] == s_tot[i-3]):
+            s_converge = i
+
+    for i in range(5,max_episode):
+        if(q_tot[i] == q_tot[i-1] and q_tot[i] == q_tot[i-2] and q_tot[i] == q_tot[i-3] ):
+            q_converge = i
+
+    for i in range(5,max_episode):
+        if(c_tot[i] == c_tot[i-1] and c_tot[i] == c_tot[i-2] and c_tot[i] == c_tot[i-3] ):
+            c_converge = i
+
+    for i in range(5,max_episode):
+        if(v_tot[i] == v_tot[i-1] and v_tot[i] == v_tot[i-2] and v_tot[i] == v_tot[i-3]):
+            v_converge = i
+
+
+    converges = [s_converge, q_converge, c_converge, v_converge]
+
+    xx = ['SARSA', 'Q_LEARNER', 'CONSTANT DEPTH Q', 'VARYING DEPTH Q']
+    collors = ['black', 'cyan', 'green', 'red']
+    fig, ax = plt.subplots(1, 1)
+    ax.bar(xx, converges, color=collors)
+    plt.tight_layout()
+    #plt.show()
+
+
+    #####BIGGEST
+
+    ##READING THE GRAPH##
+    framework_graph = graph_reader.return_graph('generating4/100000_0.2_20_strong2_#1.csv')
+    alphabet_card = 20
+    ##READING THE GRAPH##
+
+    ##CONVERTING GRAPH REPRESENTATION##
+    graph = convert_to_list_representation(framework_graph)
+    ##CONVERTING GRAPH REPRESENTATION##
+
+    epsilon = 0.01
+    decay_rate = 0
+
+    #####ONE EXPERIMENT RUNTIME SARSA#####
+    q_table = empty_q_table(graph, alphabet_card)
+    rewards = get_rewards(framework_graph)
+    s_tot, s_found, eps = sarsa(rewards, framework_graph, graph, q_table, 10)
+    #####ONE EXPERIMENT RUNTIME SARSA#####
+
+    #####ONE EXPERIMENT RUNTIME Q_LEARN#####
+    q_table = empty_q_table(graph, alphabet_card)
+    rewards = get_rewards(framework_graph)
+    q_tot, q_found, eps = q_learn(rewards, framework_graph, graph, q_table, 10)
+    #####ONE EXPERIMENT RUNTIME Q_LEARN#####
+
+    #####ONE EXPERIMENT RUNTIME Q_LEARN WITH CONSTANT DEPTH#####
+    q_table = empty_q_table(graph, alphabet_card)
+    rewards = get_rewards(framework_graph)
+    c_tot, c_found, eps = q_learn_constant_depth(rewards, framework_graph, graph, q_table, 10)
+    #####ONE EXPERIMENT RUNTIME Q_LEARN WITH CONSTANT DEPTH#####
+
+    #####ONE EXPERIMENT RUNTIME Q_LEARN VARYING DEPTH#####
+    q_table = empty_q_table(graph, alphabet_card)
+    rewards = get_rewards(framework_graph)
+    v_tot, v_found, eps = q_learn_varying_depth(rewards, framework_graph, graph, q_table, 10)
+    #####ONE EXPERIMENT RUNTIME Q_LEARN VARYING DEPTH#####
+
+    x = []
+    for i in range(max_episode):
+        x.append(i)
+
+        
+    plt.subplot(3,1,1)
+    plt.title('100000_0.2_20_strong2_#1.csv, Epsilon Greedy 0.01')
+    plt.plot(x, s_tot, label = 'Sarsa', color='black')
+    plt.plot(x, q_tot, label = 'Q Learner', color='cyan')
+    plt.plot(x, c_tot, label = 'Q Constant Depth', color='green')
+    plt.plot(x, v_tot, label = 'Q Varying Depth', color='red')
+    plt.ylabel('Total Reward')
+    plt.legend()
+
+    plt.subplot(3,1,2)
+    plt.plot(x, s_found, label = 'Sarsa', color='black')
+    plt.plot(x, q_found, label = 'Q Learner', color='cyan')
+    plt.plot(x, c_found, label = 'Q Constant Depth', color='green')
+    plt.plot(x, v_found, label = 'Q Varying Depth', color='red')
+    plt.ylabel('Found in Time Steps')
+    plt.legend()
+
+    plt.subplot(3,1,3)
+    plt.plot(x, eps, label = 'Epsilon', color='red')
+    plt.ylabel('Epsilon Change')
+    plt.legend()
+
+    plt.tight_layout()
+    #plt.show()
+    plt.savefig('100000_0.2_10_strong2_#1.csv_Epsilon_Greedy_0.01.pdf')
+    
+    s_converge = max_episode
+    q_converge = max_episode
+    c_converge = max_episode
+    v_converge = max_episode
+
+    
+    for i in range(5,max_episode):
+        if(s_tot[i] == s_tot[i-1] and s_tot[i] == s_tot[i-2] and s_tot[i] == s_tot[i-3] ):
+            s_converge = i
+
+    for i in range(5,max_episode):
+        if(q_tot[i] == q_tot[i-1] and q_tot[i] == q_tot[i-2] and q_tot[i] == q_tot[i-3] ):
+            q_converge = i
+
+    for i in range(5,max_episode):
+        if(c_tot[i] == c_tot[i-1] and c_tot[i] == c_tot[i-2] and c_tot[i] == c_tot[i-3] ):
+            c_converge = i
+
+    for i in range(5,max_episode):
+        if(v_tot[i] == v_tot[i-1] and v_tot[i] == v_tot[i-2] and v_tot[i] == v_tot[i-3]):
+            v_converge = i
+
+
+    converges = [s_converge, q_converge, c_converge, v_converge]
+
+    xx = ['SARSA', 'Q_LEARNER', 'CONSTANT DEPTH Q', 'VARYING DEPTH Q']
+    collors = ['black', 'cyan', 'green', 'red']
+    fig, ax = plt.subplots(1, 1)
+    ax.bar(xx, converges, color=collors)
+    plt.tight_layout()
+    #plt.show()
+
+    ######DECAY
+
+
+
+    epsilon = 1
+    decay_rate = 1/(max_episode-(max_episode/4))
+
+    #####ONE EXPERIMENT RUNTIME SARSA#####
+    epsilon = 1
+    q_table = empty_q_table(graph, alphabet_card)
+    rewards = get_rewards(framework_graph)
+    s_tot, s_found, eps = sarsa(rewards, framework_graph, graph, q_table, 10)
+    #####ONE EXPERIMENT RUNTIME SARSA#####
+
+    #####ONE EXPERIMENT RUNTIME Q_LEARN#####
+    epsilon = 1
+    q_table = empty_q_table(graph, alphabet_card)
+    rewards = get_rewards(framework_graph)
+    q_tot, q_found, eps = q_learn(rewards, framework_graph, graph, q_table, 10)
+    #####ONE EXPERIMENT RUNTIME Q_LEARN#####
+
+    #####ONE EXPERIMENT RUNTIME Q_LEARN WITH CONSTANT DEPTH#####
+    epsilon = 1
+    q_table = empty_q_table(graph, alphabet_card)
+    rewards = get_rewards(framework_graph)
+    c_tot, c_found, eps = q_learn_constant_depth(rewards, framework_graph, graph, q_table, 10)
+    #####ONE EXPERIMENT RUNTIME Q_LEARN WITH CONSTANT DEPTH#####
+
+    #####ONE EXPERIMENT RUNTIME Q_LEARN VARYING DEPTH#####
+    epsilon = 1
+    q_table = empty_q_table(graph, alphabet_card)
+    rewards = get_rewards(framework_graph)
+    v_tot, v_found, eps = q_learn_varying_depth(rewards, framework_graph, graph, q_table, 10)
+    #####ONE EXPERIMENT RUNTIME Q_LEARN VARYING DEPTH#####
+
+    x = []
+    for i in range(max_episode):
+        x.append(i)
+
+        
+    plt.subplot(3,1,1)
+    plt.title('100000_0.2_10_strong2_#1.csv, Decaying Epsilon')
+    plt.plot(x, s_tot, label = 'Sarsa', color='black')
+    plt.plot(x, q_tot, label = 'Q Learner', color='cyan')
+    plt.plot(x, c_tot, label = 'Q Constant Depth', color='green')
+    plt.plot(x, v_tot, label = 'Q Varying Depth', color='red')
+    plt.ylabel('Total Reward')
+    plt.legend()
+
+    plt.subplot(3,1,2)
+    plt.plot(x, s_found, label = 'Sarsa', color='black')
+    plt.plot(x, q_found, label = 'Q Learner', color='cyan')
+    plt.plot(x, c_found, label = 'Q Constant Depth', color='green')
+    plt.plot(x, v_found, label = 'Q Varying Depth', color='red')
+    plt.ylabel('Found in Time Steps')
+    plt.legend()
+
+    plt.subplot(3,1,3)
+    plt.plot(x, eps, label = 'Epsilon', color='red')
+    plt.ylabel('Epsilon Change')
+    plt.legend()
+
+    plt.tight_layout()
+    #plt.show()
+    plt.savefig('20_0.2_10_strong2_#1.csv_Epsilon_Decaying.pdf')
+
+    s_converge = max_episode
+    q_converge = max_episode
+    c_converge = max_episode
+    v_converge = max_episode
+
+    
+    for i in range(5,max_episode):
+        if(s_tot[i] == s_tot[i-1] and s_tot[i] == s_tot[i-2] and s_tot[i] == s_tot[i-3]):
+            s_converge = i
+
+    for i in range(5,max_episode):
+        if(q_tot[i] == q_tot[i-1] and q_tot[i] == q_tot[i-2] and q_tot[i] == q_tot[i-3] ):
+            q_converge = i
+
+    for i in range(5,max_episode):
+        if(c_tot[i] == c_tot[i-1] and c_tot[i] == c_tot[i-2] and c_tot[i] == c_tot[i-3] ):
+            c_converge = i
+
+    for i in range(5,max_episode):
+        if(v_tot[i] == v_tot[i-1] and v_tot[i] == v_tot[i-2] and v_tot[i] == v_tot[i-3]):
+            v_converge = i
+
+
+    converges = [s_converge, q_converge, c_converge, v_converge]
+
+    xx = ['SARSA', 'Q_LEARNER', 'CONSTANT DEPTH Q', 'VARYING DEPTH Q']
+    collors = ['black', 'cyan', 'green', 'red']
+    fig, ax = plt.subplots(1, 1)
+    ax.bar(xx, converges, color=collors)
+    plt.tight_layout()
+    #plt.show()
 
 
 if __name__ == '__main__':
