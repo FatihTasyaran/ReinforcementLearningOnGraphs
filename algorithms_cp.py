@@ -5,15 +5,15 @@ import time
 import matplotlib.pyplot as plt
 import numpy as np
 
-max_episode = 200
+max_episode = 500
 learning_rate = 0.9
 discount = 0.9
-epsilon = 1 ##Start with exploration
-decay_rate = 1/(max_episode-(max_episode/4)) ##First half of episodes favor exploration,
+epsilon = 1##Start with exploration
+decay_rate = 1/(max_episode-(max_episode/5)) ##First half of episodes favor exploration,
                                ##Second half favor exploitation
 max_q_depth = 1
 CHECKPOINT_FOUND = False
-CHECKPOINT = 8
+CHECKPOINT = 4325
 
 def calculate_new_q(rewards1, rewards2, q_table, action, old_state, new_state):
     ##IMPLEMENTING BELLMAN OPTIMALITY
@@ -534,7 +534,7 @@ def get_rewards(framework_graph):
         if(framework_graph[i]['Faulty'] == True):
             rewards2.append(5)
         if(i == CHECKPOINT):
-            rewards1.append(5)
+            rewards1.append(0)
         else:
             rewards2.append(-1)
     ##SETTING UP THE REWARDS##
@@ -544,10 +544,10 @@ def get_rewards(framework_graph):
 def main():
     
     ##READING THE GRAPH##
-    framework_graph = graph_reader.return_graph('10s/55_0.3_8_strong2_#4.csv')
-    #framework_graph = graph_reader.return_graph('generating2/96000_0.2_25_strong2_#2.csv')
+    #framework_graph = graph_reader.return_graph('10s/55_0.3_8_strong2_#4.csv')
+    framework_graph = graph_reader.return_graph('generating2/46000_0.2_25_strong2_#2.csv')
     #framework_graph = graph_reader.return_graph('generating3/180000_0.2_25_strong2_#2.csv')
-    alphabet_card = 8
+    alphabet_card = 25
     ##READING THE GRAPH##
 
     ##CONVERTING GRAPH REPRESENTATION##
