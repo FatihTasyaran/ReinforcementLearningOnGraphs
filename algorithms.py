@@ -590,7 +590,7 @@ def main():
         c_converge += c_found[i]
 
     for i in range(0,175):
-        v_converge = v_found[i]
+        v_converge += v_found[i]
 
 
     converges = [s_converge, q_converge, c_converge, v_converge]
@@ -599,8 +599,8 @@ def main():
     collors = ['black', 'cyan', 'green', 'red']
     fig, ax = plt.subplots(1, 1)
     ax.bar(xx, converges, color=collors)
-    plt.tight_layout()
     plt.title('Steps to Converge')
+    plt.tight_layout()
     plt.savefig('1.pdf')
 
     ######DECAY
@@ -669,27 +669,23 @@ def main():
     #plt.show()
     plt.savefig('20_0.2_10_strong2_#1.csv_Epsilon_Decaying.pdf')
 
-    s_converge = max_episode
-    q_converge = max_episode
-    c_converge = max_episode
-    v_converge = max_episode
+    s_converge = 0
+    q_converge = 0
+    c_converge = 0
+    v_converge = 0
 
     
-    for i in range(5,max_episode):
-        if(s_tot[i] == s_tot[i-1] and s_tot[i] == s_tot[i-2] and s_tot[i] == s_tot[i-3]):
-            s_converge = i
+    for i in range(0,175):
+        s_converge += s_found[i]
 
-    for i in range(5,max_episode):
-        if(q_tot[i] == q_tot[i-1] and q_tot[i] == q_tot[i-2] and q_tot[i] == q_tot[i-3] ):
-            q_converge = i
+    for i in range(0,175):
+        q_converge += q_found[i]
 
-    for i in range(5,max_episode):
-        if(c_tot[i] == c_tot[i-1] and c_tot[i] == c_tot[i-2] and c_tot[i] == c_tot[i-3] ):
-            c_converge = i
+    for i in range(0,175):
+        c_converge += c_found[i]
 
-    for i in range(5,max_episode):
-        if(v_tot[i] == v_tot[i-1] and v_tot[i] == v_tot[i-2] and v_tot[i] == v_tot[i-3]):
-            v_converge = i
+    for i in range(0,175):
+        v_converge += v_found[i]
 
 
     converges = [s_converge, q_converge, c_converge, v_converge]
@@ -698,9 +694,9 @@ def main():
     collors = ['black', 'cyan', 'green', 'red']
     fig, ax = plt.subplots(1, 1)
     ax.bar(xx, converges, color=collors)
+    plt.title('Steps to Converge')
     plt.tight_layout()
-    #plt.show()
-
+    plt.savefig('2.pdf')
     ####MEDIUM
 
     ##READING THE GRAPH##
@@ -767,31 +763,27 @@ def main():
     plt.ylabel('Epsilon Change')
     plt.legend()
 
-    plt.tight_layout()
     #plt.show
+    plt.tight_layout()
     plt.savefig('200_0.2_15_strong2_#1.csv_Epsilon_Greedy_0.01.pdf')
 
-    s_converge = max_episode
-    q_converge = max_episode
-    c_converge = max_episode
-    v_converge = max_episode
+    s_converge = 0
+    q_converge = 0
+    c_converge = 0
+    v_converge = 0
 
     
-    for i in range(5,max_episode):
-        if(s_tot[i] == s_tot[i-1] and s_tot[i] == s_tot[i-2] and s_tot[i] == s_tot[i-3] ):
-            s_converge = i
+    for i in range(0,175):
+        s_converge += s_found[i]
 
-    for i in range(5,max_episode):
-        if(q_tot[i] == q_tot[i-1] and q_tot[i] == q_tot[i-2] and q_tot[i] == q_tot[i-3] ):
-            q_converge = i
+    for i in range(0,175):
+        q_converge += q_found[i]
 
-    for i in range(5,max_episode):
-        if(c_tot[i] == c_tot[i-1] and c_tot[i] == c_tot[i-2] and c_tot[i] == c_tot[i-3] ):
-            c_converge = i
+    for i in range(0,175):
+        c_converge += c_found[i]
 
-    for i in range(5,max_episode):
-        if(v_tot[i] == v_tot[i-1] and v_tot[i] == v_tot[i-2] and v_tot[i] == v_tot[i-3]):
-            v_converge = i
+    for i in range(0,175):
+        v_converge += v_found[i]
 
 
     converges = [s_converge, q_converge, c_converge, v_converge]
@@ -800,9 +792,9 @@ def main():
     collors = ['black', 'cyan', 'green', 'red']
     fig, ax = plt.subplots(1, 1)
     ax.bar(xx, converges, color=collors)
+    plt.title('Steps to Converge')
     plt.tight_layout()
-    #plt.show
-
+    plt.savefig('3.pdf')
     ######DECAY
 
 
@@ -869,27 +861,23 @@ def main():
     #plt.show()
     plt.savefig('200_0.2_10_strong2_#1.csv_Decaying.pdf')
 
-    s_converge = max_episode
-    q_converge = max_episode
-    c_converge = max_episode
-    v_converge = max_episode
+    s_converge = 0
+    q_converge = 0
+    c_converge = 0
+    v_converge = 0
 
     
-    for i in range(5,max_episode):
-        if(s_tot[i] == s_tot[i-1] and s_tot[i] == s_tot[i-2] and s_tot[i] == s_tot[i-3]):
-            s_converge = i
+    for i in range(0,175):
+        s_converge += s_found[i]
 
-    for i in range(5,max_episode):
-        if(q_tot[i] == q_tot[i-1] and q_tot[i] == q_tot[i-2] and q_tot[i] == q_tot[i-3] ):
-            q_converge = i
+    for i in range(0,175):
+        q_converge += q_found[i]
 
-    for i in range(5,max_episode):
-        if(c_tot[i] == c_tot[i-1] and c_tot[i] == c_tot[i-2] and c_tot[i] == c_tot[i-3] ):
-            c_converge = i
+    for i in range(0,175):
+        c_converge += c_found[i]
 
-    for i in range(5,max_episode):
-        if(v_tot[i] == v_tot[i-1] and v_tot[i] == v_tot[i-2] and v_tot[i] == v_tot[i-3]):
-            v_converge = i
+    for i in range(0,175):
+        v_converge += v_found[i]
 
 
     converges = [s_converge, q_converge, c_converge, v_converge]
@@ -898,10 +886,9 @@ def main():
     collors = ['black', 'cyan', 'green', 'red']
     fig, ax = plt.subplots(1, 1)
     ax.bar(xx, converges, color=collors)
+    plt.title('Steps to Converge')
     plt.tight_layout()
-    #plt.show()
-
-
+    plt.savefig('4.pdf')
     ######BIG
 
     ##READING THE GRAPH##
@@ -971,27 +958,23 @@ def main():
     #plt.show()
     plt.savefig('2000_0.2_10_strong2_#1.csv_Epsilon_Greedy_0.01.pdf')
 
-    s_converge = max_episode
-    q_converge = max_episode
-    c_converge = max_episode
-    v_converge = max_episode
+    s_converge = 0
+    q_converge = 0
+    c_converge = 0
+    v_converge = 0
 
     
-    for i in range(5,max_episode):
-        if(s_tot[i] == s_tot[i-1] and s_tot[i] == s_tot[i-2] and s_tot[i] == s_tot[i-3] ):
-            s_converge = i
+    for i in range(0,175):
+        s_converge += s_found[i]
 
-    for i in range(5,max_episode):
-        if(q_tot[i] == q_tot[i-1] and q_tot[i] == q_tot[i-2] and q_tot[i] == q_tot[i-3] ):
-            q_converge = i
+    for i in range(0,175):
+        q_converge += q_found[i]
 
-    for i in range(5,max_episode):
-        if(c_tot[i] == c_tot[i-1] and c_tot[i] == c_tot[i-2] and c_tot[i] == c_tot[i-3] ):
-            c_converge = i
+    for i in range(0,175):
+        c_converge += c_found[i]
 
-    for i in range(5,max_episode):
-        if(v_tot[i] == v_tot[i-1] and v_tot[i] == v_tot[i-2] and v_tot[i] == v_tot[i-3]):
-            v_converge = i
+    for i in range(0,175):
+        v_converge += v_found[i]
 
 
     converges = [s_converge, q_converge, c_converge, v_converge]
@@ -1000,9 +983,9 @@ def main():
     collors = ['black', 'cyan', 'green', 'red']
     fig, ax = plt.subplots(1, 1)
     ax.bar(xx, converges, color=collors)
+    plt.title('Steps to Converge')
     plt.tight_layout()
-    #plt.show()
-
+    plt.savefig('5.pdf')
     ######DECAY
 
 
@@ -1065,31 +1048,27 @@ def main():
     plt.ylabel('Epsilon Change')
     plt.legend()
 
-    plt.tight_layout()
     #plt.show()
-    plt.savefig('20_0.2_10_strong2_#1.csv_Decaying.pdf')
+    plt.tight_layout()
+    plt.savefig('20b_0.2_10_strong2_#1.csv_Decaying.pdf')
 
-    s_converge = max_episode
-    q_converge = max_episode
-    c_converge = max_episode
-    v_converge = max_episode
+    s_converge = 0
+    q_converge = 0
+    c_converge = 0
+    v_converge = 0
 
     
-    for i in range(5,max_episode):
-        if(s_tot[i] == s_tot[i-1] and s_tot[i] == s_tot[i-2] and s_tot[i] == s_tot[i-3]):
-            s_converge = i
+    for i in range(0,175):
+        s_converge += s_found[i]
 
-    for i in range(5,max_episode):
-        if(q_tot[i] == q_tot[i-1] and q_tot[i] == q_tot[i-2] and q_tot[i] == q_tot[i-3] ):
-            q_converge = i
+    for i in range(0,175):
+        q_converge += q_found[i]
 
-    for i in range(5,max_episode):
-        if(c_tot[i] == c_tot[i-1] and c_tot[i] == c_tot[i-2] and c_tot[i] == c_tot[i-3] ):
-            c_converge = i
+    for i in range(0,175):
+        c_converge += c_found[i]
 
-    for i in range(5,max_episode):
-        if(v_tot[i] == v_tot[i-1] and v_tot[i] == v_tot[i-2] and v_tot[i] == v_tot[i-3]):
-            v_converge = i
+    for i in range(0,175):
+        v_converge += v_found[i]
 
 
     converges = [s_converge, q_converge, c_converge, v_converge]
@@ -1099,8 +1078,8 @@ def main():
     fig, ax = plt.subplots(1, 1)
     ax.bar(xx, converges, color=collors)
     plt.tight_layout()
-    #plt.show()
-
+    plt.title('Steps to Converge')
+    plt.savefig('6.pdf')
 
     #####BIGGEST
 
@@ -1167,31 +1146,27 @@ def main():
     plt.ylabel('Epsilon Change')
     plt.legend()
 
-    plt.tight_layout()
     #plt.show()
-    plt.savefig('100000_0.2_10_strong2_#1.csv_Epsilon_Greedy_0.01.pdf')
+    plt.tight_layout()
+    plt.savefig('100000m_0.2_10_strong2_#1.csv_Epsilon_Greedy_0.01.pdf')
     
-    s_converge = max_episode
-    q_converge = max_episode
-    c_converge = max_episode
-    v_converge = max_episode
+    s_converge = 0
+    q_converge = 0
+    c_converge = 0
+    v_converge = 0
 
     
-    for i in range(5,max_episode):
-        if(s_tot[i] == s_tot[i-1] and s_tot[i] == s_tot[i-2] and s_tot[i] == s_tot[i-3] ):
-            s_converge = i
+    for i in range(0,175):
+        s_converge += s_found[i]
 
-    for i in range(5,max_episode):
-        if(q_tot[i] == q_tot[i-1] and q_tot[i] == q_tot[i-2] and q_tot[i] == q_tot[i-3] ):
-            q_converge = i
+    for i in range(0,175):
+        q_converge += q_found[i]
 
-    for i in range(5,max_episode):
-        if(c_tot[i] == c_tot[i-1] and c_tot[i] == c_tot[i-2] and c_tot[i] == c_tot[i-3] ):
-            c_converge = i
+    for i in range(0,175):
+        c_converge += c_found[i]
 
-    for i in range(5,max_episode):
-        if(v_tot[i] == v_tot[i-1] and v_tot[i] == v_tot[i-2] and v_tot[i] == v_tot[i-3]):
-            v_converge = i
+    for i in range(0,175):
+        v_converge += v_found[i]
 
 
     converges = [s_converge, q_converge, c_converge, v_converge]
@@ -1201,8 +1176,8 @@ def main():
     fig, ax = plt.subplots(1, 1)
     ax.bar(xx, converges, color=collors)
     plt.tight_layout()
-    #plt.show()
-
+    plt.title('Steps to Converge')
+    plt.savefig('7.pdf')
     ######DECAY
 
 
@@ -1265,31 +1240,28 @@ def main():
     plt.ylabel('Epsilon Change')
     plt.legend()
 
-    plt.tight_layout()
+    
     #plt.show()
-    plt.savefig('20_0.2_10_strong2_#1.csv_Epsilon_Decaying.pdf')
+    plt.tight_layout()
+    plt.savefig('1000000_0.2_10_strong2_#1.csv_Epsilon_Decaying.pdf')
 
-    s_converge = max_episode
-    q_converge = max_episode
-    c_converge = max_episode
-    v_converge = max_episode
+    s_converge = 0
+    q_converge = 0
+    c_converge = 0
+    v_converge = 0
 
     
-    for i in range(5,max_episode):
-        if(s_tot[i] == s_tot[i-1] and s_tot[i] == s_tot[i-2] and s_tot[i] == s_tot[i-3]):
-            s_converge = i
+    for i in range(0,175):
+        s_converge += s_found[i]
 
-    for i in range(5,max_episode):
-        if(q_tot[i] == q_tot[i-1] and q_tot[i] == q_tot[i-2] and q_tot[i] == q_tot[i-3] ):
-            q_converge = i
+    for i in range(0,175):
+        q_converge += q_found[i]
 
-    for i in range(5,max_episode):
-        if(c_tot[i] == c_tot[i-1] and c_tot[i] == c_tot[i-2] and c_tot[i] == c_tot[i-3] ):
-            c_converge = i
+    for i in range(0,175):
+        c_converge += c_found[i]
 
-    for i in range(5,max_episode):
-        if(v_tot[i] == v_tot[i-1] and v_tot[i] == v_tot[i-2] and v_tot[i] == v_tot[i-3]):
-            v_converge = i
+    for i in range(0,175):
+        v_converge += v_found[i]
 
 
     converges = [s_converge, q_converge, c_converge, v_converge]
@@ -1299,8 +1271,8 @@ def main():
     fig, ax = plt.subplots(1, 1)
     ax.bar(xx, converges, color=collors)
     plt.tight_layout()
-    #plt.show()
-
+    plt.title('Steps to Converge')
+    plt.savefig('8.pdf')
 
 if __name__ == '__main__':
     random.seed(os.urandom(10000))
