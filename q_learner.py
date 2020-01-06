@@ -5,9 +5,9 @@ import matplotlib.pyplot as plt
 import time
 import operator
 
-learning_rate = 0.95
-discount_rate = 0.75
-epsilon = 1
+learning_rate = 0.75
+discount_rate = 0.65
+epsilon = 1000
 
 def calculate_new_q(graph, state, action, q_table, rewards):
     #print('q at calculating:', q_table, 'a:', action)
@@ -24,7 +24,7 @@ def calculate_new_q(graph, state, action, q_table, rewards):
     #print('Possbru:', possibru)
     new_state = 0
 
-    global_max = -1
+    global_max = 1
 
     for item in possibru:
         if(rewards[int(item[0][1:])] > global_max):
@@ -49,7 +49,7 @@ def choose_action(graph, state, q_table, rewards):
 
     global epsilon
     
-    val = random.randint(0, 1000)/1000
+    val = random.randint(0, 1000)#/1000
     #print('val:', val)
 
     possible_actions_list = []
@@ -61,9 +61,11 @@ def choose_action(graph, state, q_table, rewards):
 
     if(val > epsilon):
         print('Random Choice')
+        print('VAL:',val, 'EPSILON:',epsilon)
         action = random.choice(possible_actions_list)
 
     else:
+        print('VAL:',val, 'EPSILON:',epsilon)
         #action = int(max(possible_actions, key=int))
         action = int(max(possible_actions.items(), key=operator.itemgetter(1))[0])
         act_val = int(max(possible_actions.items(), key=operator.itemgetter(1))[1])
@@ -82,7 +84,7 @@ def choose_action(graph, state, q_table, rewards):
                     action = i
      '''
 
-    epsilon = epsilon - 0.001
+    #epsilon = epsilon - 0.01
 
     #print('State:', state, 'Possible Actions:', possible_actions)
     #print('Action:', action, 'Epsilon:', epsilon)
@@ -128,7 +130,7 @@ def q_learn(graph, card_alphabet, rewards, start_state, filename):
             
     for epoc in range(epoch):    
          print("######EPOCH ", epoc, " ########")
-         epsilon = epoc
+         epsilon = 1000 - epoc
          start_state = original_state
          found = False
          episodes = 0
@@ -171,12 +173,12 @@ def q_learn(graph, card_alphabet, rewards, start_state, filename):
     print_q_table(q_table)
     ##START LEARNING##
     plt.subplot(2,1,1)
-    plt.plot(x, total_at_end, label = 'Total Reward', color='black')
+    plt.plot(x, total_at_end[:1000], label = 'Total Reward', color='black')
     plt.ylabel('Total Reward Over Epochs')
     plt.title(filename + " " + str(epoch) + " epochs")
 
     plt.subplot(2,1,2)
-    plt.plot(x, found_in, label = 'Episodes', color='red')
+    plt.plot(x, found_in[:1000], label = 'Episodes', color='red')
     plt.ylabel('Found in Episodes')
     
     plt.show()
@@ -185,8 +187,9 @@ def q_learn(graph, card_alphabet, rewards, start_state, filename):
 
 
 def main():
-    graph = graph_reader.return_graph('10s/15_0.7_11_strong2_#4.csv')
-    graph = graph_reader.return_graph('10s/60_0.7_11_strong2_#4.csv')
+    #graph = graph_reader.return_graph('10s/15_0.7_11_strong2_#4.csv')
+    #graph = graph_reader.return_graph('10s/60_0.7_11_strong2_#4.csv')
+    graph = graph_reader.return_graph('10s/15_0.3_8_strong2_#4.csv')
     
     
     #graph = graph_reader.return_graph('/home/fatih/Documents/CS560/project/generating2/700_0.2_10_strong2_#5.csv')
@@ -194,19 +197,19 @@ def main():
 
     for i in range(len(graph)):
         if(graph[i]['Faulty'] == True):
-            rewards.append(20)
+            rewards.append(40)
         else:
-            rewards.append(-1)
+            rewards.append(-2)
 
     #print('Rewards:', rewards)
     
     ###
     
     ###
-    card_alphabet = 11
+    card_alphabet = 8
     #start = random.randint(0, len(graph))
-    start = 22
-    q_learn(graph, card_alphabet, rewards, start, '10s/15_0.7_11_strong2_#4.csv')
+    start = 4
+    q_learn(graph, card_alphabet, rewards, start, '10s/15_0.3_8_strong2_#4.csv')
     #print(graph)
 
 if __name__ == '__main__':
