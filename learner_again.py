@@ -7,8 +7,8 @@ import matplotlib.pyplot as plt
 max_episode = 100
 learning_rate = 0.9
 discount = 0.9
-epsilon = 1 ##Start with exploration
-decay_rate = 1/(max_episode) ##First half of episodes favor exploration,
+epsilon = 0.000001 ##Start with exploration
+decay_rate = 0#1/(max_episode) ##First half of episodes favor exploration,
                                ##Second half favor exploitation
 
 def calculate_new_q(rewards, q_table, action, old_state, new_state):
@@ -120,6 +120,7 @@ def q_learn(rewards, framework_graph, graph, q_table, start):
         
     plt.subplot(3,1,1)
     plt.plot(x, total_rewards, label = 'Total Reward', color='black')
+    #plt.plot(x, found_in, label = 'Time Steps', color='red')
     plt.ylabel('Total Reward')
 
     plt.subplot(3,1,2)
@@ -161,8 +162,9 @@ def convert_to_list_representation(framework_graph):
 
 def main():
     ##READING THE GRAPH##
-    framework_graph = graph_reader.return_graph('10s/15_0.3_8_strong2_#4.csv')
-    alphabet_card = 8
+    #framework_graph = graph_reader.return_graph('10s/55_0.3_8_strong2_#4.csv')
+    framework_graph = graph_reader.return_graph('generating2/96000_0.2_25_strong2_#2.csv')
+    alphabet_card = 25
     ##READING THE GRAPH##
 
 
@@ -203,7 +205,7 @@ def main():
 
 
     ##START ALGORITHM##
-    q_learn(rewards, framework_graph, graph, q_table, 7)
+    q_learn(rewards, framework_graph, graph, q_table, 22043)
     ##START ALGORITHM##
 
 
