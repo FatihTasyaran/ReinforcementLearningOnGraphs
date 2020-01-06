@@ -1,0 +1,151 @@
+import graph_reader
+import random
+import os
+import time
+
+max_episode = 50
+learning_rate = 0.9
+discount = 0.9
+epsilon = 1 ##Start with exploration
+decay_rate = 1/(max_episode) ##First half of episodes favor exploration,
+                               ##Second half favor exploitation
+
+            
+def choose_action(graph, q_table, state):
+    global epsilon
+    global decay_rate
+    action = -1 ##Cardinal value to be changed
+    
+    rand_num = random.uniform(0,1)
+    print(rand_num)
+    
+
+    if rand_num > epsilon:
+        print('exploitation')
+        my_max = -1000 ##Cardinal value to be changed
+        for i in range(q_table[state]):
+            if(q_table[state][i] != 'NA'):
+                if(q_table[state][i] > my_max):
+                    my_max = q_table[state][i]
+                    action = graph[state][0][i][0]
+            
+    else:
+        print('exploration')
+        possibles = []
+        for i in range(len(q_table[state])):
+            if(q_table[state][i] != 'NA'):
+                possibles.append(i)
+
+        action = random.choice(possibles)
+
+    
+
+    return action
+
+
+def q_learn(framework_graph, graph, q_table, start):
+    #print('decay rate:', decay_rate)
+    #print('epsilon goes to 0 in:', 1/decay_rate, ' episodes')
+
+    global epsilon
+    global decay_rate
+
+    state = start
+    for episode in range(max_episode):
+        found = False
+        while(not found):
+            action = choose_action(graph, q_table, state)
+            
+            for i in range(len(graph[state][0])):
+                print('len:', len(graph[state][0]))
+                try:
+                    if (action  == graph[state][0][i][1]):##Check that chosen action transit to which state
+                        state = graph[state][0][i][0] ##Corresponding state
+                        print('state:', state)
+                except:
+                    print('exception:', graph[state][0])
+            
+            if(framework_graph[state]['Faulty'] == True):
+                found = True
+        
+        epsilon -= decay_rate
+        #time.sleep(0.1)
+
+def convert_to_list_representation(framework_graph):
+    print(framework_graph[0])
+
+    graph = [[[],[]] for i in range(len(framework_graph))]
+
+    ##graph[i][0] -> State i outgoing edges
+    ##graph[i][1] -> State i incoming edges
+    for i in range(len(framework_graph)):
+        for item in framework_graph[i]['Outgoing_edges']:
+            graph[i][0].append((int(item[0][1:]),int(item[1])))
+        for item in framework_graph[i]['Incoming_edges']:
+            try:
+                graph[i][1].append((int(item[0][1:]),int(item[1])))
+            except:
+                print('Fault:', item)
+
+    ctr = -1
+    for item in graph:
+        ctr += 1
+        print(ctr,item)
+
+    return graph
+        
+    
+
+def main():
+    ##READING THE GRAPH##
+    framework_graph = graph_reader.return_graph('10s/15_0.3_8_strong2_#4.csv')
+    alphabet_card = 8
+    ##READING THE GRAPH##
+
+
+    
+    ##CONVERTING GRAPH REPRESENTATION##
+    graph = convert_to_list_representation(framework_graph)
+    ##CONVERTING GRAPH REPRESENTATION##
+
+
+
+    ##SETTING UP THE REWARDS##
+    rewards = []
+
+    for i in range(len(framework_graph)):
+        if(framework_graph[i]['Faulty'] == True):
+            rewards.append(5)
+        else:
+            rewards.append(-1)
+    ##SETTING UP THE REWARDS##
+
+
+
+
+    ##SETTING UP THE Q_TABLE##
+    q_table = [['NA' for i in range(alphabet_card)] for i in range(len(graph))]
+
+    for i in range(len(graph)):
+        for item in graph[i][0]:
+            try:
+                q_table[i][item[1]] = 0
+            except:
+                print(item[1])
+    
+    for item in q_table:
+        print(item)
+    ##SETTING UP THE Q_TABLE##
+
+
+
+    ##START ALGORITHM##
+    q_learn(framework_graph, graph, q_table, 9)
+    ##START ALGORITHM##
+
+
+if __name__ == '__main__':
+    random.seed(os.urandom(10000))
+    main()
+
+    
