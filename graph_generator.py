@@ -555,7 +555,8 @@ def strongly_connected_alg2(no_states, no_edges, density, card_alphabet):
         add_to_graph(graph, out_node, in_node, card_alphabet)
 
         
-    no_faulty = no_states*0.05
+    #no_faulty = no_states*0.05
+    no_faulty = 1
     no_faulty = int(no_faulty)
     if (no_faulty == 0):
         no_faulty = 1

@@ -4,10 +4,10 @@ import os
 import time
 import matplotlib.pyplot as plt
 
-max_episode = 100
+max_episode = 500
 learning_rate = 0.9
 discount = 0.9
-epsilon = 0.000001 ##Start with exploration
+epsilon = 0.001 ##Start with exploration
 decay_rate = 0#1/(max_episode) ##First half of episodes favor exploration,
                                ##Second half favor exploitation
 
@@ -74,6 +74,7 @@ def q_learn(rewards, framework_graph, graph, q_table, start):
     eps = []
     
     for episode in range(max_episode):
+        print('****EPISODE ', episode, ' ****')
         state = start
         found = False
         time_step = 1
@@ -163,7 +164,8 @@ def convert_to_list_representation(framework_graph):
 def main():
     ##READING THE GRAPH##
     #framework_graph = graph_reader.return_graph('10s/55_0.3_8_strong2_#4.csv')
-    framework_graph = graph_reader.return_graph('generating2/96000_0.2_25_strong2_#2.csv')
+    #framework_graph = graph_reader.return_graph('generating2/96000_0.2_25_strong2_#2.csv')
+    framework_graph = graph_reader.return_graph('generating3/180000_0.2_25_strong2_#2.csv')
     alphabet_card = 25
     ##READING THE GRAPH##
 
@@ -205,7 +207,7 @@ def main():
 
 
     ##START ALGORITHM##
-    q_learn(rewards, framework_graph, graph, q_table, 22043)
+    q_learn(rewards, framework_graph, graph, q_table, 0)
     ##START ALGORITHM##
 
 
