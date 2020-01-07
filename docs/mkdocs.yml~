@@ -1,0 +1,9 @@
+site_name: Reinforcement Learning Applications on Graphs
+nav:
+    - Project: index.md
+    - graph_generator.py: graph_generator.md
+    - graph_reader.py: graph_reader.md
+    - q_learner.py: q_learner.md
+    - algorithms.py: algorithms.md
+    -algortihms_cp.py: algorithms_cp.md
+theme: readthedocs
