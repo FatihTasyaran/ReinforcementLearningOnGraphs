@@ -13,7 +13,7 @@ decay_rate = 1/(max_episode-(max_episode/5)) ##First half of episodes favor expl
                                ##Second half favor exploitation
 max_q_depth = 1
 CHECKPOINT_FOUND = False
-CHECKPOINT = 4325
+CHECKPOINT = 19
 
 def calculate_new_q(rewards1, rewards2, q_table, action, old_state, new_state):
     ##IMPLEMENTING BELLMAN OPTIMALITY
@@ -234,7 +234,8 @@ def q_learn(rewards1, rewards2, framework_graph, graph, q_table, start):
     plt.ylabel('Epsilon Change')
 
     plt.tight_layout()
-    plt.show()
+    #plt.show()
+    plt.savefig('checkpoint.pdf')
 
     return total_rewards, found_in, eps
     ####DRAWING # OF TIME STEPS VS EPISODES AND REWARD####
