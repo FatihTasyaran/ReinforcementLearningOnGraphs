@@ -269,6 +269,8 @@ def q_learn(rewards1, rewards2, rewards3, framework_graph, graph, q_table, start
     
     tit = str(len(framework_graph))
     title = tit + ' nodes ' + eps
+
+    
         
     plt.subplot(3,1,1)
     plt.title(title)
@@ -303,7 +305,7 @@ def q_learn(rewards1, rewards2, rewards3, framework_graph, graph, q_table, start
 
     plt.tight_layout()
     #plt.show()
-    name = str(epsilon) + '_' + str(max_episode) + '.pdf'
+    name = str(epsilon) + '_' + str(max_episode) + 'big.pdf'
     plt.savefig(name)
     
     return total_rewards, found_in, eps, learned_min
@@ -631,16 +633,16 @@ def main():
 
     global epsilon
     global decay_rate
-
-    
     #####ONE EXPERIMENT RUNTIME Q_LEARN#####
+
     epsilon = 1
     decay_rate = 1/(max_episode-(max_episode/5)) 
     q_table = empty_q_table(graph, alphabet_card)
     rewards1, rewards2, rewards3 = get_rewards(framework_graph)
     q_tot, q_found, eps, one_learned_min = q_learn(rewards1, rewards2, rewards3, framework_graph, graph, q_table, 0)
-    #####ONE EXPERIMENT RUNTIME Q_LEARN####
 
+    #####ONE EXPERIMENT RUNTIME Q_LEARN####
+    
     #####ONE EXPERIMENT RUNTIME Q_LEARN#####
     epsilon = 0.1
     decay_rate = 0
@@ -648,7 +650,7 @@ def main():
     rewards1, rewards2, rewards3 = get_rewards(framework_graph)
     q_tot, q_found, eps, onef_learned_min = q_learn(rewards1, rewards2, rewards3, framework_graph, graph, q_table, 0)
     #####ONE EXPERIMENT RUNTIME Q_LEARN####
-
+   
     #####ONE EXPERIMENT RUNTIME Q_LEARN#####
     epsilon = 0.01
     decay_rate = 0
@@ -669,7 +671,7 @@ def main():
 
     real_small = [2,5,7]
 
-    '''
+    
 
     plt.subplot(3,1,1)
     titr = str(max_episode) + ' Episodes 55 Nodes Learned Min Distances \n Start to CHECKPOINT 1'
@@ -699,7 +701,7 @@ def main():
 
     plt.savefig('100_small_learned_min.pdf')
     
-    '''
+    
     
 
 
@@ -747,7 +749,7 @@ ct/Data/generating4/2000_0.2_17_strong2_#1.csv')
 
     real_small = [3,5,8]
 
-    '''
+    
 
     plt.subplot(3,1,1)
     titr = str(max_episode) + ' Episodes 2000 Nodes Learned Min Distances \n Start to CHECKPOINT 1'
@@ -776,7 +778,6 @@ ct/Data/generating4/2000_0.2_17_strong2_#1.csv')
     #plt.show()
     plt.savefig('100_big_learned_min.pdf')
 
-    '''
 
 if __name__ == '__main__':
     random.seed(os.urandom(10000))
