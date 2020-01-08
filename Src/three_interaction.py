@@ -147,7 +147,7 @@ def sarsa_calculate(graph, rewards, q_table, action, old_state, new_state):
 
     q_table[old_state][action] = old + new
 
-def q_learn(rewards1, rewards2, rewards3, framework_graph, graph, q_table, start):
+def q_learn(rewards1, rewards2, rewards3, framework_graph, graph, q_table, start, size):
     #print('decay rate:', decay_rate)
     #print('epsilon goes to 0 in:', 1/decay_rate, ' episodes')
 
@@ -270,20 +270,20 @@ def q_learn(rewards1, rewards2, rewards3, framework_graph, graph, q_table, start
     tit = str(len(framework_graph))
     title = tit + ' nodes ' + eps
 
-    
+    fig, (ax0,ax1,ax2) = plt.subplots(3)
         
-    plt.subplot(3,1,1)
-    plt.title(title)
-    plt.plot(x, total_rewards, label = 'Total Reward', color='black')
+    #plt.subplot(3,1,1)
+    ax0.set_title(title)
+    ax0.plot(x, total_rewards, label = 'Total Reward', color='black')
     #plt.plot(x, found_in, label = 'Time Steps', color='red')
-    plt.ylabel('Total Reward')
+    ax0.set_ylabel('Total Reward')
 
-    plt.subplot(3,1,2)
-    plt.plot(x, checkp1, label = 'Check Point1', color='green')
-    plt.plot(x, checkp2, label = 'Check Point2', color='purple')
-    plt.plot(x, found_in, label = 'Fault', color='red')
-    plt.ylabel('Found in Time Steps')
-    plt.legend()
+    #plt.subplot(3,1,2)
+    ax1.plot(x, checkp1, label = 'Check Point1', color='green')
+    ax1.plot(x, checkp2, label = 'Check Point2', color='purple')
+    ax1.plot(x, found_in, label = 'Fault', color='red')
+    ax1.set_ylabel('Found in Time Steps')
+    ax1.legend()
 
     tot_c1 = sum(checkp1)
     tot_c2 = sum(checkp2)
@@ -293,9 +293,9 @@ def q_learn(rewards1, rewards2, rewards3, framework_graph, graph, q_table, start
     xx = ['CHECKPOINT1', 'CHECKPOINT2', 'FAULTY']
     collors = ['green', 'purple', 'red']
 
-    plt.subplot(3,1,3)
-    plt.title('Total Time Steps Spent')
-    plt.bar(xx, totals, color=collors)
+    #plt.subplot(3,1,3)
+    ax2.set_title('Total Time Steps Spent')
+    ax2.bar(xx, totals, color=collors)
 
     '''
     plt.subplot(3,1,3)
@@ -303,10 +303,10 @@ def q_learn(rewards1, rewards2, rewards3, framework_graph, graph, q_table, start
     plt.ylabel('Epsilon Change')
     '''
 
-    plt.tight_layout()
+    fig.tight_layout()
     #plt.show()
-    name = str(epsilon) + '_' + str(max_episode) + 'big.pdf'
-    plt.savefig(name)
+    name = 'e' + str(epsilon) + '_' + str(max_episode) + size + '.pdf'
+    fig.savefig(name)
     
     return total_rewards, found_in, eps, learned_min
     ####DRAWING # OF TIME STEPS VS EPISODES AND REWARD####
@@ -633,13 +633,17 @@ def main():
 
     global epsilon
     global decay_rate
+
+    small = 'small'
+    big = 'big'
+    
     #####ONE EXPERIMENT RUNTIME Q_LEARN#####
 
     epsilon = 1
     decay_rate = 1/(max_episode-(max_episode/5)) 
     q_table = empty_q_table(graph, alphabet_card)
     rewards1, rewards2, rewards3 = get_rewards(framework_graph)
-    q_tot, q_found, eps, one_learned_min = q_learn(rewards1, rewards2, rewards3, framework_graph, graph, q_table, 0)
+    q_tot, q_found, eps, one_learned_min = q_learn(rewards1, rewards2, rewards3, framework_graph, graph, q_table, 0, small)
 
     #####ONE EXPERIMENT RUNTIME Q_LEARN####
     
@@ -648,7 +652,7 @@ def main():
     decay_rate = 0
     q_table = empty_q_table(graph, alphabet_card)
     rewards1, rewards2, rewards3 = get_rewards(framework_graph)
-    q_tot, q_found, eps, onef_learned_min = q_learn(rewards1, rewards2, rewards3, framework_graph, graph, q_table, 0)
+    q_tot, q_found, eps, onef_learned_min = q_learn(rewards1, rewards2, rewards3, framework_graph, graph, q_table, 0, small)
     #####ONE EXPERIMENT RUNTIME Q_LEARN####
    
     #####ONE EXPERIMENT RUNTIME Q_LEARN#####
@@ -656,7 +660,7 @@ def main():
     decay_rate = 0
     q_table = empty_q_table(graph, alphabet_card)
     rewards1, rewards2, rewards3 = get_rewards(framework_graph)
-    q_tot, q_found, eps, twof_learned_min= q_learn(rewards1, rewards2, rewards3, framework_graph, graph, q_table, 0)
+    q_tot, q_found, eps, twof_learned_min= q_learn(rewards1, rewards2, rewards3, framework_graph, graph, q_table, 0, small)
     #####ONE EXPERIMENT RUNTIME Q_LEARN####
 
     #####ONE EXPERIMENT RUNTIME Q_LEARN#####
@@ -664,7 +668,7 @@ def main():
     decay_rate = 0
     q_table = empty_q_table(graph, alphabet_card)
     rewards1, rewards2, rewards3 = get_rewards(framework_graph)
-    q_tot, q_found, eps , threef_learned_min= q_learn(rewards1, rewards2, rewards3, framework_graph, graph, q_table, 0)
+    q_tot, q_found, eps , threef_learned_min= q_learn(rewards1, rewards2, rewards3, framework_graph, graph, q_table, 0, small)
     #####ONE EXPERIMENT RUNTIME Q_LEARN####
 
     collors = ['black', 'purple', 'cyan', 'red', 'green']
@@ -699,7 +703,7 @@ def main():
     plt.tight_layout()
     #plt.show()
 
-    plt.savefig('100_small_learned_min.pdf')
+    plt.savefig(str(max_episode) + '_' + 'small_learned_min.pdf')
     
     
     
@@ -718,7 +722,7 @@ ct/Data/generating4/2000_0.2_17_strong2_#1.csv')
     decay_rate = 1/(max_episode-(max_episode/5)) 
     q_table = empty_q_table(graph, alphabet_card)
     rewards1, rewards2, rewards3 = get_rewards(framework_graph)
-    q_tot, q_found, eps, one_learned_min= q_learn(rewards1, rewards2, rewards3, framework_graph, graph, q_table, 0)
+    q_tot, q_found, eps, one_learned_min= q_learn(rewards1, rewards2, rewards3, framework_graph, graph, q_table, 0, big)
     #####ONE EXPERIMENT RUNTIME Q_LEARN####
 
     #####ONE EXPERIMENT RUNTIME Q_LEARN#####
@@ -726,7 +730,7 @@ ct/Data/generating4/2000_0.2_17_strong2_#1.csv')
     decay_rate = 0
     q_table = empty_q_table(graph, alphabet_card)
     rewards1, rewards2, rewards3 = get_rewards(framework_graph)
-    q_tot, q_found, eps, onef_learned_min = q_learn(rewards1, rewards2, rewards3, framework_graph, graph, q_table, 0)
+    q_tot, q_found, eps, onef_learned_min = q_learn(rewards1, rewards2, rewards3, framework_graph, graph, q_table, 0, big)
     #####ONE EXPERIMENT RUNTIME Q_LEARN####
 
     #####ONE EXPERIMENT RUNTIME Q_LEARN#####
@@ -734,7 +738,7 @@ ct/Data/generating4/2000_0.2_17_strong2_#1.csv')
     decay_rate = 0
     q_table = empty_q_table(graph, alphabet_card)
     rewards1, rewards2, rewards3 = get_rewards(framework_graph)
-    q_tot, q_found, eps, twof_learned_min = q_learn(rewards1, rewards2, rewards3, framework_graph, graph, q_table, 0)
+    q_tot, q_found, eps, twof_learned_min = q_learn(rewards1, rewards2, rewards3, framework_graph, graph, q_table, 0, big)
     #####ONE EXPERIMENT RUNTIME Q_LEARN####
 
     #####ONE EXPERIMENT RUNTIME Q_LEARN#####
@@ -742,7 +746,7 @@ ct/Data/generating4/2000_0.2_17_strong2_#1.csv')
     decay_rate = 0
     q_table = empty_q_table(graph, alphabet_card)
     rewards1, rewards2, rewards3 = get_rewards(framework_graph)
-    q_tot, q_found, eps, threef_learned_min = q_learn(rewards1, rewards2, rewards3, framework_graph, graph, q_table, 0)
+    q_tot, q_found, eps, threef_learned_min = q_learn(rewards1, rewards2, rewards3, framework_graph, graph, q_table, 0, big)
     #####ONE EXPERIMENT RUNTIME Q_LEARN####
 
     collors = ['black', 'purple', 'cyan', 'red', 'green']
@@ -776,7 +780,7 @@ ct/Data/generating4/2000_0.2_17_strong2_#1.csv')
 
     plt.tight_layout()
     #plt.show()
-    plt.savefig('100_big_learned_min.pdf')
+    plt.savefig(str(max_episode) + '_' + 'big_learned_min.pdf')
 
 
 if __name__ == '__main__':
