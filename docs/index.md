@@ -6,6 +6,6 @@ Every section contains explanation for the corresponding source file. Since all 
 ### Project representation
 Throughout the project, a representation for graphs stated below used. This representation could be easily transformed into other graph libraries.
 
-    S0,Out,S4,27,S9347,32,S26,4,S18,0
+    S0,Out,S4,27,S9347,32,S26,4,S18,0,In,S5,44,S6,92,True
 
-Where the values depicted are states and integers are actions.
+Where the values depicted are states and integers are actions. And the boolean statement in the end is faulty property of the state.
